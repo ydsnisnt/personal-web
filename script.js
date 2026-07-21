@@ -1,36 +1,30 @@
-// ==========================================
-// LOGIKA INTERAKTIF SAKLAR MODEREN
-// ==========================================
-
-// 1. Tangkap elemen checkbox (saklar) dan teks indikator dari HTML
+// ELEMEN SAKLAR & TEKS
 const toggleSwitch = document.getElementById('mode-toggle');
 const modeText = document.getElementById('mode-text');
 const bodyElement = document.body;
 
-// 2. Berikan fungsi pendengar ketika kondisi saklar berubah (di-geser)
+// ELEMEN SOSMED
+const btnSosmed = document.getElementById('btn-sosmed');
+const sosmedMenu = document.getElementById('sosmed-menu');
+
+// 1. Logika Saklar Mode
 toggleSwitch.addEventListener('change', () => {
-    
-    // ".checked" bernilai true jika saklar digeser ke kanan (aktif)
     if (toggleSwitch.checked) {
-        
-        // Aksi saat saklar AKTIF (Masuk ke Fun Mode)
         bodyElement.classList.remove('theme-maroon');
         bodyElement.classList.add('theme-blue');
-        
-        // Mengubah teks di sebelah saklar secara dinamis
         modeText.innerText = "Fun Mode 🎮";
-
-        // [FITUR SELANJUTNYA]: Tempat memicu animasi/efek teks mode santai
-        
     } else {
-        
-        // Aksi saat saklar NON-AKTIF (Kembali ke Profesional Mode)
         bodyElement.classList.remove('theme-blue');
         bodyElement.classList.add('theme-maroon');
-        
-        // Mengubah kembali teksnya
         modeText.innerText = "Profesional Mode 💼";
-
-        // [FITUR SELANJUTNYA]: Tempat mengubah konten menjadi bahasa formal
+        
+        // Tutup menu sosmed jika user balik ke mode Profesional
+        sosmedMenu.classList.add('hidden');
     }
+});
+
+// 2. Logika Buka/Tutup Menu Sosmed saat Tombol Diklik
+btnSosmed.addEventListener('click', () => {
+    // toggle() akan menambah class 'hidden' jika belum ada, atau mencabutnya jika sudah ada
+    sosmedMenu.classList.toggle('hidden');
 });

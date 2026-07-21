@@ -15,7 +15,7 @@ body.theme-blue {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: background-color 0.5s ease, color 0.5s ease;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 body {
@@ -29,21 +29,91 @@ body {
     min-height: 100vh;
 }
 
-.container {
-    text-align: center;
-    padding: 20px;
+/* ==========================================
+   2. HEADER BAR (Bagian Atas Penuh)
+   ========================================== */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between; /* Kiri untuk sosmed, Kanan untuk saklar */
+    align-items: center;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.15); /* Efek kaca transparan */
+    backdrop-filter: blur(8px);
+}
+
+.nav-left {
+    position: relative;
+}
+
+/* Tombol Sosmed */
+.btn-sosmed {
+    display: none; /* Default sembunyi (di mode marun/profesional) */
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-sosmed:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* KONTROL: Tampilkan tombol sosmed HANYA saat Mode Fun (Blue) aktif */
+body.theme-blue .btn-sosmed {
+    display: block;
+}
+
+/* Menu Dropdown Sosmed */
+.sosmed-menu {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    min-width: 140px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Class 'hidden' untuk menyembunyikan menu saat tidak diklik */
+.sosmed-menu.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+}
+
+/* Link Sosmed di dalam menu */
+.sosmed-item {
+    text-decoration: none;
+    color: #1e3c72;
+    font-weight: bold;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.sosmed-item:hover {
+    background: #a1c4fd;
+    color: #000;
 }
 
 /* ==========================================
-   2. POSISI HEADER (Pojok Kanan Atas)
+   3. SAKLAR MODEREN
    ========================================== */
-.main-header {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 100;
-}
-
 .toggle-container {
     display: flex;
     align-items: center;
@@ -52,9 +122,6 @@ body {
     font-size: 0.95rem;
 }
 
-/* ==========================================
-   3. ANIMASI SAKLAR GESER (TOGGLE)
-   ========================================== */
 .switch {
     position: relative;
     display: inline-block;
@@ -62,11 +129,7 @@ body {
     height: 26px;
 }
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
+.switch input { opacity: 0; width: 0; height: 0; }
 
 .slider {
     position: absolute;
@@ -81,22 +144,17 @@ body {
 .slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
     background-color: white;
     transition: .4s;
     border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Warna saklar saat aktif (Checked) */
-input:checked + .slider {
-    background-color: #4ade80; /* Hijau segar */
-}
+input:checked + .slider { background-color: #4ade80; }
+input:checked + .slider:before { transform: translateX(24px); }
 
-/* Animasi geser bulatan ke kanan */
-input:checked + .slider:before {
-    transform: translateX(24px);
+.container {
+    text-align: center;
+    padding: 20px;
 }
