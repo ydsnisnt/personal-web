@@ -1,48 +1,67 @@
 /* ==========================================
-   1. IMPORT FONT MODERN (Inter & Poppins)
+   1. IMPORT FONT MODERN
    ========================================== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Poppins:wght@300;400;600;800;900&display=swap');
 
 /* ==========================================
-   2. PALET WARNA PRESISI SESUAI REFERENSI
+   2. PALET WARNA & ANIMASI BACKGROUND DINAMIS
    ========================================== */
-/* Mode Profesional: CRIMSON VELVET */
+/* Mode Profesional: CRIMSON VELVET DINAMIS */
 body.theme-maroon {
-    /* Gradasi utama sesuai gambar: #2C0F12 -> #6B1E23 */
-    --bg-gradient: radial-gradient(circle at center, #6B1E23 0%, #2C0F12 70%, #150708 100%);
+    /* Menggunakan 4 titik warna gradasi untuk pergerakan halus */
+    background: linear-gradient(-45deg, #2C0F12, #6B1E23, #150708, #4a1218);
+    background-size: 400% 400%; /* Memperbesar ukuran background agar bisa digeser oleh animasi */
+    animation: gradientBG 15s ease infinite; /* Memanggil animasi pergerakan background */
+    
     --card-bg: rgba(44, 15, 18, 0.6);
     --text-color: #ffffff;
     --accent-color: #e63946;
-    --accent-glow: rgba(230, 57, 70, 0.4);
+    --accent-glow: rgba(230, 57, 70, 0.5);
     --subtext-color: #d8a7b1;
-    --title-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
 }
 
-/* Mode Fun: NAVY MIRAGE */
+/* Mode Fun: NAVY MIRAGE DINAMIS */
 body.theme-blue {
-    /* Gradasi utama sesuai gambar: #141E30 -> #35577D */
-    --bg-gradient: radial-gradient(circle at center, #35577D 0%, #141E30 70%, #0a0f18 100%);
+    /* Menggunakan 4 titik warna gradasi biru untuk pergerakan halus */
+    background: linear-gradient(-45deg, #141E30, #35577D, #0a0f18, #1e3c72);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    
     --card-bg: rgba(20, 30, 48, 0.6);
     --text-color: #ffffff;
     --accent-color: #38bdf8;
-    --accent-glow: rgba(56, 189, 248, 0.4);
+    --accent-glow: rgba(56, 189, 248, 0.5);
     --subtext-color: #a0c4ff;
-    --title-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
 }
 
 /* ==========================================
-   3. BASE & RESET
+   3. ANIMASI KEYFRAMES PERGERAKAN BACKGROUND
+   ========================================== */
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ==========================================
+   4. BASE & RESET
    ========================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: background 0.6s ease, color 0.6s ease;
+    /* Transisi perpindahan warna saat saklar diklik */
+    transition: color 0.6s ease, border-color 0.6s ease;
 }
 
 body {
-    background: var(--bg-gradient);
-    background-attachment: fixed;
+    /* Latar belakang menggunakan variable background dari theme di atas */
     color: var(--text-color);
     font-family: 'Poppins', 'Inter', sans-serif;
     min-height: 100vh;
@@ -52,7 +71,6 @@ body {
     align-items: center;
     overflow: hidden;
 }
-
 /* ==========================================
    4. HEADER MINIMALIS
    ========================================== */
@@ -118,7 +136,7 @@ body {
     filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
     
     /* Menerapkan Animasi Melayang secara Terus-Menerus */
-    animation: floatingText 4s ease-in-out infinite;
+
     transition: transform 0.4s ease, filter 0.4s ease, letter-spacing 0.4s ease;
 }
 
@@ -309,7 +327,7 @@ input:checked + .slider:before { transform: translateX(23px); }
 /* Tampilkan tombol HANYA saat Mode Fun (Blue) aktif */
 body.theme-blue .btn-funfact {
     display: inline-block;
-    animation: floatingText 4s ease-in-out infinite; /* Efek melayang halus */
+    
 }
 
 .btn-funfact:hover {
