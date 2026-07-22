@@ -1,132 +1,254 @@
 /* ==========================================
-   1. VARIABLES & BASE STYLING
+   1. IMPORT FONT MODERN (Inter & Poppins)
    ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Poppins:wght@300;400;600;800;900&display=swap');
+
+/* ==========================================
+   2. PALET WARNA PRESISI SESUAI REFERENSI
+   ========================================== */
+/* Mode Profesional: CRIMSON VELVET */
 body.theme-maroon {
-    --bg-color: #800000;
+    /* Gradasi utama sesuai gambar: #2C0F12 -> #6B1E23 */
+    --bg-gradient: radial-gradient(circle at center, #6B1E23 0%, #2C0F12 70%, #150708 100%);
+    --card-bg: rgba(44, 15, 18, 0.6);
     --text-color: #ffffff;
+    --accent-color: #e63946;
+    --accent-glow: rgba(230, 57, 70, 0.4);
+    --subtext-color: #d8a7b1;
+    --title-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
 }
 
+/* Mode Fun: NAVY MIRAGE */
 body.theme-blue {
-    --bg-color: #1e3c72;
+    /* Gradasi utama sesuai gambar: #141E30 -> #35577D */
+    --bg-gradient: radial-gradient(circle at center, #35577D 0%, #141E30 70%, #0a0f18 100%);
+    --card-bg: rgba(20, 30, 48, 0.6);
     --text-color: #ffffff;
+    --accent-color: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.4);
+    --subtext-color: #a0c4ff;
+    --title-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
 }
 
+/* ==========================================
+   3. BASE & RESET
+   ========================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: background-color 0.4s ease, color 0.4s ease;
+    transition: background 0.6s ease, color 0.6s ease;
 }
 
 body {
-    background-color: var(--bg-color);
+    background: var(--bg-gradient);
+    background-attachment: fixed;
     color: var(--text-color);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', 'Inter', sans-serif;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    align-items: center;
+    overflow: hidden;
 }
 
 /* ==========================================
-   2. HEADER BAR (Bagian Atas Penuh)
+   4. HEADER MINIMALIS
    ========================================== */
 .main-header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 15px 30px;
+    padding: 25px 40px;
     display: flex;
-    justify-content: space-between; /* Kiri untuk sosmed, Kanan untuk saklar */
+    justify-content: space-between;
     align-items: center;
     z-index: 100;
-    background: rgba(0, 0, 0, 0.15); /* Efek kaca transparan */
-    backdrop-filter: blur(8px);
 }
 
+.logo {
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* ==========================================
+   5. KONTEN HERO (TEKS MELAYANG & INTERAKTIF)
+   ========================================== */
+.hero-container {
+    text-align: center;
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+.sub-title-top {
+    font-size: 0.85rem;
+    letter-spacing: 6px;
+    color: var(--subtext-color);
+    margin-bottom: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    transition: letter-spacing 0.4s ease, color 0.4s ease;
+}
+
+/* LOGIKA TEKS MELAYANG (FLOATING ANIMATION) */
+.main-title {
+    font-size: clamp(2.3rem, 6vw, 5.2rem);
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    
+    /* Gradasi Teks Halus */
+    background: linear-gradient(180deg, #ffffff 40%, var(--subtext-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* Bayangan & Glow */
+    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
+    
+    /* Menerapkan Animasi Melayang secara Terus-Menerus */
+    animation: floatingText 4s ease-in-out infinite;
+    transition: transform 0.4s ease, filter 0.4s ease, letter-spacing 0.4s ease;
+}
+
+/* INTERAKSI HALUS SAAT KURSOR DI ATAS TEKS (HOVER) */
+.hero-container:hover .main-title {
+    /* Teks sedikit terangkat dan renggang */
+    transform: translateY(-8px) scale(1.02);
+    letter-spacing: 6px;
+    /* Pendaran (glow) makin menyala */
+    filter: drop-shadow(0 20px 30px var(--accent-glow));
+}
+
+.hero-container:hover .sub-title-top {
+    letter-spacing: 8px;
+    color: #ffffff;
+}
+
+.hero-container:hover .sub-title-bottom {
+    letter-spacing: 6px;
+    color: #ffffff;
+}
+
+.sub-title-bottom {
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+    color: var(--subtext-color);
+    font-weight: 300;
+    text-transform: uppercase;
+    transition: letter-spacing 0.4s ease, color 0.4s ease;
+}
+
+/* KEYFRAMES ANIMASI MELAYANG (NAIK-TURUN HALUS) */
+@keyframes floatingText {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-12px); /* Naik 12 piksel */
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* ==========================================
+   6. MENU SOSMED (GLASSMORPHISM WITH SHADOW)
+   ========================================== */
 .nav-left {
     position: relative;
 }
 
-/* Tombol Sosmed */
 .btn-sosmed {
-    display: none; /* Default sembunyi (di mode marun/profesional) */
-    background: rgba(255, 255, 255, 0.2);
+    display: none;
+    background: rgba(255, 255, 255, 0.08);
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
     cursor: pointer;
-    transition: 0.3s;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
 }
 
 .btn-sosmed:hover {
-    background: rgba(255, 255, 255, 0.4);
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px var(--accent-glow);
+    transform: translateY(-2px);
 }
 
-/* KONTROL: Tampilkan tombol sosmed HANYA saat Mode Fun (Blue) aktif */
 body.theme-blue .btn-sosmed {
     display: block;
 }
 
-/* Menu Dropdown Sosmed */
 .sosmed-menu {
     position: absolute;
     top: 45px;
-    left: 0;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
-    padding: 10px;
+    right: 0;
+    background: rgba(20, 30, 48, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    gap: 6px;
     min-width: 140px;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
 }
 
-/* Class 'hidden' untuk menyembunyikan menu saat tidak diklik */
 .sosmed-menu.hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-10px);
+    display: none;
 }
 
-/* Link Sosmed di dalam menu */
 .sosmed-item {
     text-decoration: none;
-    color: #1e3c72;
-    font-weight: bold;
-    font-size: 0.9rem;
-    padding: 6px 12px;
-    border-radius: 6px;
-    transition: 0.2s;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: 0.2s ease;
 }
 
 .sosmed-item:hover {
-    background: #a1c4fd;
+    background: var(--accent-color);
     color: #000;
+    font-weight: 600;
 }
 
 /* ==========================================
-   3. SAKLAR MODEREN
+   7. SAKLAR SWITCH MODERN
    ========================================== */
 .toggle-container {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    font-weight: 500;
 }
 
 .switch {
     position: relative;
     display: inline-block;
-    width: 50px;
-    height: 26px;
+    width: 48px;
+    height: 25px;
 }
 
 .switch input { opacity: 0; width: 0; height: 0; }
@@ -135,26 +257,65 @@ body.theme-blue .btn-sosmed {
     position: absolute;
     cursor: pointer;
     top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     transition: .4s;
     border-radius: 34px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 18px; width: 18px;
+    height: 17px; width: 17px;
     left: 3px; bottom: 3px;
     background-color: white;
     transition: .4s;
     border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
-input:checked + .slider { background-color: #4ade80; }
-input:checked + .slider:before { transform: translateX(24px); }
+input:checked + .slider { 
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
 
-.container {
-    text-align: center;
-    padding: 20px;
+input:checked + .slider:before { transform: translateX(23px); }
+
+/* ==========================================
+   TOMBOL FUN FACTS (KHUSUS FUN MODE)
+   ========================================== */
+.fun-btn-wrapper {
+    margin-top: 30px;
+}
+
+.btn-funfact {
+    display: none; /* Sembunyi secara default */
+    text-decoration: none;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+}
+
+/* Tampilkan tombol HANYA saat Mode Fun (Blue) aktif */
+body.theme-blue .btn-funfact {
+    display: inline-block;
+    animation: floatingText 4s ease-in-out infinite; /* Efek melayang halus */
+}
+
+.btn-funfact:hover {
+    background: var(--accent-color);
+    color: #000000;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px var(--accent-glow);
+    transform: translateY(-4px) scale(1.05);
 }

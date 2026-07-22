@@ -10,39 +10,46 @@
 
     <!-- HEADER UTAMA -->
     <header class="main-header">
-        
-        <!-- BAGIAN KIRI HEADER: Tombol Menu Sosmed (Khusus Fun Mode) -->
-        <div class="nav-left">
-            <!-- Tombol ini cuma muncul di Fun Mode -->
-            <button id="btn-sosmed" class="btn-sosmed">Sosmed 📱</button>
-            
-            <!-- Menu Melayang Sosmed -->
-            <div id="sosmed-menu" class="sosmed-menu hidden">
-                <!-- ============================================================== -->
-                <!-- 📍 CATATAN TEMPAT TEMPEL LINK SOSMED-MU ADA DI BAWAH INI:     -->
-                <!-- Ganti tanda '#' di dalam href="" dengan link akun aslimu!       -->
-                <!-- ============================================================== -->
-                <a href="https://instagram.com/ydsisnt_" target="_blank" class="sosmed-item">Instagram</a>
-                <a href="https://www.facebook.com/share/1DQ97p2Qo3/" target="_blank" class="sosmed-item">Facebook</a>
-                <a href="https://youtube.com/@yudasisnandar7334?si=ZW-1c0GmTW8SjK70" target="_blank" class="sosmed-item">YouTube</a>
-                <a href="https://pin.it/3Sw97f5mN" target="_blank" class="sosmed-item">Pinterest</a>
+        <!-- Brand / Logo Kiri Atas -->
+        <div class="logo">YDSNISNT</div>
+
+        <!-- Bagian Kanan Header: Sosmed & Saklar -->
+        <div class="header-right">
+            <!-- Tombol Sosmed (Hanya Muncul di Fun Mode) -->
+            <div class="nav-left">
+                <button id="btn-sosmed" class="btn-sosmed">Sosmed 📱</button>
+                
+                <div id="sosmed-menu" class="sosmed-menu hidden">
+                    <!-- TEMPEL LINK SOSMED DI SINI -->
+                    <a href="https://instagram.com/ydsisnt_" target="_blank" class="sosmed-item">Instagram</a>
+                    <a href="https://www.facebook.com/share/1DQ97p2Qo3/" target="_blank" class="sosmed-item">Facebook</a>
+                    <a href="https://www.youtube.com/@yudasisnandar7334" target="_blank" class="sosmed-item">YouTube</a>
+                    <a href="Check out my Pinterest profile! https://pin.it/1u1EvgTv3" target="_blank" class="sosmed-item">Pinterest</a>
+                </div>
+            </div>
+
+            <!-- Saklar Mode -->
+            <div class="toggle-container">
+                <span id="mode-text">Profesional Mode 💼</span>
+                <label class="switch">
+                    <input type="checkbox" id="mode-toggle">
+                    <span class="slider"></span>
+                </label>
             </div>
         </div>
-
-        <!-- BAGIAN KANAN HEADER: Saklar Switch Mode -->
-        <div class="toggle-container">
-            <span id="mode-text">Profesional Mode 💼</span>
-            <label class="switch">
-                <input type="checkbox" id="mode-toggle">
-                <span class="slider"></span>
-            </label>
-        </div>
-
     </header>
 
-    <!-- KONTEN UTAMA -->
-    <main class="container">
-        <h1>Wellcome  Bhuwakckzzz!!</h1>
+    <!-- KONTEN UTAMA (HERO SECTION DESAIN MINIMALIS) -->
+    <main class="hero-container">
+
+        
+        <!-- Judul Utama yang Teksnya Berubah via JavaScript -->
+        <h1 id="hero-title" class="main-title">Hallo Im ydsisnt</h1>
+
+        <div class="fun-btn-wrapper">
+            <a href="funfact.html" id="btn-funfact" class="btn-funfact"> Fun Fact About Me</a>
+        </div>
+        
     </main>
 
     <script src="script.js"></script>
