@@ -337,3 +337,31 @@ body.theme-blue .btn-funfact {
     box-shadow: 0 0 20px var(--accent-glow);
     transform: translateY(-4px) scale(1.05);
 }
+
+/* ==========================================
+   STYLING FOOTER COPYRIGHT (INDEX.HTML)
+   ========================================== */
+.main-footer {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+.main-footer p {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--subtext-color); /* Otomatis menyesuaikan warna tema */
+    opacity: 0.7;
+    transition: opacity 0.3s ease, color 0.5s ease;
+}
+
+/* Efek saat kursor diarahkan ke footer */
+.main-footer p:hover {
+    opacity: 1;
+    color: var(--text-color);
+    text-shadow: 0 0 10px var(--accent-glow);
+}
