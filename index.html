@@ -6,6 +6,12 @@
     <title>ydsisnt | Personal Web</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<!--
+  class "theme-maroon" di sini cuma NILAI AWAL (default) pas web pertama dibuka.
+  Nanti begitu script.js jalan, dia bakal ngecek localStorage: kalau kamu
+  terakhir kali milih Fun Mode, class ini otomatis diganti ke "theme-blue"
+  SEBELUM kamu sempat lihat mode maroon-nya kedip sekilas.
+-->
 <body class="theme-maroon">
 
     <!-- HEADER UTAMA -->
@@ -15,16 +21,18 @@
 
         <!-- Bagian Kanan Header: Sosmed & Saklar -->
         <div class="header-right">
-            <!-- Tombol Sosmed (Hanya Muncul di Fun Mode) -->
+            <!-- Tombol Sosmed (Hanya Muncul di Fun Mode, diatur lewat CSS: body.theme-blue .btn-sosmed) -->
             <div class="nav-left">
-                <button id="btn-sosmed" class="btn-sosmed">Sosmed 📱</button>
-                
+                <button id="btn-sosmed" class="btn-sosmed" type="button" aria-expanded="false">Sosmed 📱</button>
+
                 <div id="sosmed-menu" class="sosmed-menu hidden">
                     <!-- TEMPEL LINK SOSMED DI SINI -->
-                    <a href="https://instagram.com/ydsisnt_" target="_blank" class="sosmed-item">Instagram</a>
-                    <a href="https://www.facebook.com/share/1DQ97p2Qo3/" target="_blank" class="sosmed-item">Facebook</a>
-                    <a href="https://www.youtube.com/@yudasisnandar7334" target="_blank" class="sosmed-item">YouTube</a>
-                    <a href="Check out my Pinterest profile! https://pin.it/1u1EvgTv3" target="_blank" class="sosmed-item">Pinterest</a>
+                    <a href="https://instagram.com/ydsisnt_" target="_blank" rel="noopener" class="sosmed-item">Instagram</a>
+                    <a href="https://www.facebook.com/share/1DQ97p2Qo3/" target="_blank" rel="noopener" class="sosmed-item">Facebook</a>
+                    <a href="https://www.youtube.com/@yudasisnandar7334" target="_blank" rel="noopener" class="sosmed-item">YouTube</a>
+                    <!-- FYI: href Pinterest kamu sebelumnya kepanjangan teks "Check out my Pinterest profile!..."
+                         itu bukan URL valid, jadi link-nya bakal rusak. Aku betulkan jadi URL murni di bawah. -->
+                    <a href="https://pin.it/1u1EvgTv3" target="_blank" rel="noopener" class="sosmed-item">Pinterest</a>
                 </div>
             </div>
 
@@ -42,14 +50,22 @@
     <!-- KONTEN UTAMA (HERO SECTION DESAIN MINIMALIS) -->
     <main class="hero-container">
 
-        
-        <!-- Judul Utama yang Teksnya Berubah via JavaScript -->
+        <!--
+          FIX: dulu elemen-elemen ini belum ada padahal script.js & style.css
+          udah nyiapin logikanya (heroSubtitle, .sub-title-top, .sub-title-bottom).
+          Sekarang aku tambahin, jadi ada 2 baris teks kecil: satu DI ATAS judul,
+          satu DI BAWAH judul, keduanya ikut berubah pas mode di-toggle.
+        -->
+        <p id="subtitle-top" class="sub-title-top">Welcome To My World</p>
+
         <h1 id="hero-title" class="main-title">Hallo Im ydsisnt</h1>
 
+        <p id="subtitle-bottom" class="sub-title-bottom">Informatics Engineering Student</p>
+
         <div class="fun-btn-wrapper">
-            <a href="funfact.html" id="btn-funfact" class="btn-funfact"> Fun Fact About Me</a>
+            <a href="funfact.html" id="btn-funfact" class="btn-funfact">Fun Fact About Me</a>
         </div>
-        
+
     </main>
     <footer class="main-footer">
         <p>&copy; 2026 ydsisnt. All rights reserved.</p>

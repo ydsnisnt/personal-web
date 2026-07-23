@@ -5,48 +5,61 @@
 
 /* ==========================================
    2. PALET WARNA & ANIMASI BACKGROUND DINAMIS
-   ========================================== */
-/* Mode Profesional: CRIMSON VELVET DINAMIS */
+   ==========================================
+   Trik di sini: semua komponen di bawah (tombol, teks, switch, dst)
+   TIDAK pernah pakai warna langsung (misal "color: red"). Mereka semua
+   pakai var(--accent-color), var(--text-color), dst. Jadi pas body
+   ganti class (theme-maroon <-> theme-blue), SEMUA komponen otomatis
+   ikut ganti warna tanpa perlu ditulis dua kali. Ini disebut "theming
+   lewat CSS Custom Properties".
+*/
+
+/* Mode Profesional: CRIMSON VELVET DINAMIS (gelap & serius) */
 body.theme-maroon {
-    /* Menggunakan 4 titik warna gradasi untuk pergerakan halus */
     background: linear-gradient(-45deg, #2C0F12, #6B1E23, #150708, #4a1218);
-    background-size: 400% 400%; /* Memperbesar ukuran background agar bisa digeser oleh animasi */
-    animation: gradientBG 15s ease infinite; /* Memanggil animasi pergerakan background */
-    
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+
     --card-bg: rgba(44, 15, 18, 0.6);
+    --glass-bg: rgba(255, 255, 255, 0.08);      /* kaca terang di atas bg gelap */
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --track-bg: rgba(255, 255, 255, 0.15);       /* warna dasar switch/toggle */
+    --track-border: rgba(255, 255, 255, 0.25);
     --text-color: #ffffff;
     --accent-color: #e63946;
     --accent-glow: rgba(230, 57, 70, 0.5);
     --subtext-color: #d8a7b1;
+    --title-gradient-start: #ffffff;             /* gradasi judul: putih -> subtext */
 }
 
-/* Mode Fun: NAVY MIRAGE DINAMIS */
+/* Mode Fun: SUNRISE PASTEL (cerah, simpel, minimalist) */
 body.theme-blue {
-    /* Menggunakan 4 titik warna gradasi biru untuk pergerakan halus */
-    background: linear-gradient(-45deg, #141E30, #35577D, #0a0f18, #1e3c72);
+    /* Latar terang lembut -- 4 titik warna pastel yang berpindah pelan,
+       tetap pakai animasi yang sama seperti mode profesional, cuma
+       paletnya kita balik jadi cerah */
+    background: linear-gradient(-45deg, #FFF8F0, #FFE3E3, #E8F9FF, #FFF3B0);
     background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-    
-    --card-bg: rgba(20, 30, 48, 0.6);
-    --text-color: #ffffff;
-    --accent-color: #38bdf8;
-    --accent-glow: rgba(56, 189, 248, 0.5);
-    --subtext-color: #a0c4ff;
+    animation: gradientBG 18s ease infinite;
+
+    --card-bg: rgba(255, 255, 255, 0.55);
+    --glass-bg: rgba(43, 45, 66, 0.05);          /* kaca gelap tipis di atas bg terang */
+    --glass-border: rgba(43, 45, 66, 0.12);
+    --track-bg: rgba(43, 45, 66, 0.12);
+    --track-border: rgba(43, 45, 66, 0.18);
+    --text-color: #2B2D42;                       /* teks gelap, karena bg-nya terang */
+    --accent-color: #FF6B6B;                      /* coral -- ceria tapi tetep soft */
+    --accent-glow: rgba(255, 107, 107, 0.35);
+    --subtext-color: #4A6572;
+    --title-gradient-start: #2B2D42;
 }
 
 /* ==========================================
    3. ANIMASI KEYFRAMES PERGERAKAN BACKGROUND
    ========================================== */
 @keyframes gradientBG {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 /* ==========================================
@@ -56,12 +69,10 @@ body.theme-blue {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* Transisi perpindahan warna saat saklar diklik */
-    transition: color 0.6s ease, border-color 0.6s ease;
+    transition: color 0.6s ease, border-color 0.6s ease, background-color 0.6s ease;
 }
 
 body {
-    /* Latar belakang menggunakan variable background dari theme di atas */
     color: var(--text-color);
     font-family: 'Poppins', 'Inter', sans-serif;
     min-height: 100vh;
@@ -71,8 +82,9 @@ body {
     align-items: center;
     overflow: hidden;
 }
+
 /* ==========================================
-   4. HEADER MINIMALIS
+   5. HEADER MINIMALIS
    ========================================== */
 .main-header {
     position: fixed;
@@ -101,7 +113,7 @@ body {
 }
 
 /* ==========================================
-   5. KONTEN HERO (TEKS MELAYANG & INTERAKTIF)
+   6. KONTEN HERO (TEKS INTERAKTIF)
    ========================================== */
 .hero-container {
     text-align: center;
@@ -119,44 +131,35 @@ body {
     transition: letter-spacing 0.4s ease, color 0.4s ease;
 }
 
-/* LOGIKA TEKS MELAYANG (FLOATING ANIMATION) */
 .main-title {
     font-size: clamp(2.3rem, 6vw, 5.2rem);
     font-weight: 800;
     letter-spacing: 3px;
     text-transform: uppercase;
     margin-bottom: 15px;
-    
-    /* Gradasi Teks Halus */
-    background: linear-gradient(180deg, #ffffff 40%, var(--subtext-color) 100%);
+
+    /* Gradasi teks: dari warna judul utama ke warna subtext.
+       Dulu selalu mulai dari putih -- itu masalahnya kalau
+       background terang (putih di atas putih = nggak keliatan).
+       Sekarang pakai var(--title-gradient-start) yang beda tiap tema. */
+    background: linear-gradient(180deg, var(--title-gradient-start) 40%, var(--subtext-color) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    
-    /* Bayangan & Glow */
-    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
-    
-    /* Menerapkan Animasi Melayang secara Terus-Menerus */
 
+    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.25));
     transition: transform 0.4s ease, filter 0.4s ease, letter-spacing 0.4s ease;
 }
 
-/* INTERAKSI HALUS SAAT KURSOR DI ATAS TEKS (HOVER) */
 .hero-container:hover .main-title {
-    /* Teks sedikit terangkat dan renggang */
     transform: translateY(-8px) scale(1.02);
     letter-spacing: 6px;
-    /* Pendaran (glow) makin menyala */
     filter: drop-shadow(0 20px 30px var(--accent-glow));
 }
 
-.hero-container:hover .sub-title-top {
-    letter-spacing: 8px;
-    color: #ffffff;
-}
-
+.hero-container:hover .sub-title-top,
 .hero-container:hover .sub-title-bottom {
-    letter-spacing: 6px;
-    color: #ffffff;
+    letter-spacing: 8px;
+    color: var(--accent-color);
 }
 
 .sub-title-bottom {
@@ -168,31 +171,18 @@ body {
     transition: letter-spacing 0.4s ease, color 0.4s ease;
 }
 
-/* KEYFRAMES ANIMASI MELAYANG (NAIK-TURUN HALUS) */
-@keyframes floatingText {
-    0% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-12px); /* Naik 12 piksel */
-    }
-    100% {
-        transform: translateY(0px);
-    }
-}
-
 /* ==========================================
-   6. MENU SOSMED (GLASSMORPHISM WITH SHADOW)
+   7. MENU SOSMED (GLASSMORPHISM, IKUT TEMA)
    ========================================== */
 .nav-left {
     position: relative;
 }
 
 .btn-sosmed {
-    display: none;
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: none; /* default nggak muncul, ditampilkan lagi di bagian 9 khusus Fun Mode */
+    background: var(--glass-bg);
+    color: var(--text-color);
+    border: 1px solid var(--glass-border);
     padding: 8px 18px;
     border-radius: 30px;
     font-size: 0.8rem;
@@ -200,27 +190,24 @@ body {
     font-family: 'Poppins', sans-serif;
     cursor: pointer;
     backdrop-filter: blur(10px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
 }
 
 .btn-sosmed:hover {
     background: var(--accent-color);
     border-color: var(--accent-color);
+    color: #ffffff;
     box-shadow: 0 0 20px var(--accent-glow);
     transform: translateY(-2px);
-}
-
-body.theme-blue .btn-sosmed {
-    display: block;
 }
 
 .sosmed-menu {
     position: absolute;
     top: 45px;
     right: 0;
-    background: rgba(20, 30, 48, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
     border-radius: 14px;
     padding: 12px;
     display: flex;
@@ -228,7 +215,7 @@ body.theme-blue .btn-sosmed {
     gap: 6px;
     min-width: 140px;
     backdrop-filter: blur(15px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
 }
 
 .sosmed-menu.hidden {
@@ -237,7 +224,7 @@ body.theme-blue .btn-sosmed {
 
 .sosmed-item {
     text-decoration: none;
-    color: white;
+    color: var(--text-color);
     font-size: 0.8rem;
     font-weight: 500;
     padding: 8px 12px;
@@ -247,12 +234,12 @@ body.theme-blue .btn-sosmed {
 
 .sosmed-item:hover {
     background: var(--accent-color);
-    color: #000;
+    color: #ffffff;
     font-weight: 600;
 }
 
 /* ==========================================
-   7. SAKLAR SWITCH MODERN
+   8. SAKLAR SWITCH MODERN
    ========================================== */
 .toggle-container {
     display: flex;
@@ -275,11 +262,11 @@ body.theme-blue .btn-sosmed {
     position: absolute;
     cursor: pointer;
     top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background-color: var(--track-bg);
+    border: 1px solid var(--track-border);
     transition: .4s;
     border-radius: 34px;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .slider:before {
@@ -287,13 +274,13 @@ body.theme-blue .btn-sosmed {
     content: "";
     height: 17px; width: 17px;
     left: 3px; bottom: 3px;
-    background-color: white;
+    background-color: #ffffff;
     transition: .4s;
     border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
-input:checked + .slider { 
+input:checked + .slider {
     background-color: var(--accent-color);
     border-color: var(--accent-color);
     box-shadow: 0 0 15px var(--accent-glow);
@@ -302,44 +289,44 @@ input:checked + .slider {
 input:checked + .slider:before { transform: translateX(23px); }
 
 /* ==========================================
-   TOMBOL FUN FACTS (KHUSUS FUN MODE)
+   9. TOMBOL FUN FACTS (KHUSUS FUN MODE)
    ========================================== */
 .fun-btn-wrapper {
     margin-top: 30px;
 }
 
 .btn-funfact {
-    display: none; /* Sembunyi secara default */
+    display: none; /* sembunyi default, cuma tampil di Fun Mode (lihat aturan di bawah) */
     text-decoration: none;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-color);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     padding: 12px 28px;
     border-radius: 30px;
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 1px;
     backdrop-filter: blur(10px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     transition: all 0.4s ease;
 }
 
-/* Tampilkan tombol HANYA saat Mode Fun (Blue) aktif */
+/* Aturan khusus tema: tombol sosmed & fun-fact CUMA muncul saat Fun Mode aktif */
+body.theme-blue .btn-sosmed,
 body.theme-blue .btn-funfact {
     display: inline-block;
-    
 }
 
 .btn-funfact:hover {
     background: var(--accent-color);
-    color: #000000;
+    color: #ffffff;
     border-color: var(--accent-color);
     box-shadow: 0 0 20px var(--accent-glow);
     transform: translateY(-4px) scale(1.05);
 }
 
 /* ==========================================
-   STYLING FOOTER COPYRIGHT (INDEX.HTML)
+   10. FOOTER
    ========================================== */
 .main-footer {
     width: 100%;
@@ -354,14 +341,38 @@ body.theme-blue .btn-funfact {
     font-weight: 400;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--subtext-color); /* Otomatis menyesuaikan warna tema */
+    color: var(--subtext-color);
     opacity: 0.7;
     transition: opacity 0.3s ease, color 0.5s ease;
 }
 
-/* Efek saat kursor diarahkan ke footer */
 .main-footer p:hover {
     opacity: 1;
     color: var(--text-color);
     text-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* ==========================================
+   11. CONFETTI PARTICLE (dibuat oleh script.js
+       lewat document.createElement, lihat spawnConfetti())
+   ========================================== */
+.confetti-particle {
+    position: fixed;
+    top: -40px;
+    z-index: 999;
+    pointer-events: none; /* biar nggak ganggu klik ke elemen di bawahnya */
+    animation-name: confetti-fall;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
 }

@@ -16,12 +16,12 @@
 
     <!-- Konten Utama Accordion -->
     <main class="ff-container">
-        
+
         <h1 class="ff-title">MY FAVORITES & FUN FACTS</h1>
-        <p class="ff-subtitle">Ini adalah hal hal yang aku sukai 👇</p>
+        <p class="ff-subtitle">These are the things I like. 👇</p>
 
         <div class="accordion-wrapper">
-            
+
             <!-- KATEGORI 1: TOP MOVIES -->
             <details class="ff-accordion">
                 <summary class="accordion-header">
@@ -33,9 +33,9 @@
                 </summary>
                 <div class="accordion-body">
                     <ul>
-                        <li><span>1.</span> Interstellar</li>
-                        <li><span>2.</span> Inception</li>
-                        <li><span>3.</span> Cyberpunk: Edgerunners</li>
+                        <li><span>1.</span> The Medium</li>
+                        <li><span>2.</span> Obsession</li>
+                        <li><span>3.</span> The Odyssey</li>
                     </ul>
                 </div>
             </details>
@@ -87,7 +87,14 @@
                 </summary>
                 <div class="accordion-body">
                     <div class="nested-accordion-wrapper">
-                        
+
+                        <!--
+                          FITUR BARU: tombol "Salin" di sebelah UID/ID.
+                          Atribut data-copy="..." nyimpen teks murni yang mau
+                          di-copy -- jadi funfact-script.js tinggal baca
+                          atribut ini, nggak perlu parsing teks dari <p>.
+                        -->
+
                         <!-- GAME 1: MOBILE LEGENDS -->
                         <details class="game-details">
                             <summary class="game-summary">
@@ -98,7 +105,10 @@
                                 <img src="https://cdn.oneesports.gg/wp-content/uploads/sites/2/2021/05/MLBB_Phoveus-1024x639.jpg" alt="Mobile Legends Banner" class="game-banner">
                                 <div class="game-text">
                                     <p><strong>Nickname:</strong> proMAX</p>
-                                    <p><strong>User ID:</strong> 276227100 (9430)</p>
+                                    <div class="copy-row">
+                                        <p><strong>User ID:</strong> 276227100 (9430)</p>
+                                        <button class="btn-copy" data-copy="276227100 (9430)" type="button">Salin</button>
+                                    </div>
                                     <p><strong>Role Favorit:</strong> EXP / Marksman</p>
                                 </div>
                             </div>
@@ -114,7 +124,10 @@
                                 <img src="https://row.haluan.co/wp-content/uploads/2024/01/Raiden-Shogun-Genshin-Impact-1024x573.jpg" alt="Genshin Impact Banner" class="game-banner">
                                 <div class="game-text">
                                     <p><strong>Nickname:</strong> MAXIMUSIX</p>
-                                    <p><strong>UID:</strong> 860120543</p>
+                                    <div class="copy-row">
+                                        <p><strong>UID:</strong> 860120543</p>
+                                        <button class="btn-copy" data-copy="860120543" type="button">Salin</button>
+                                    </div>
                                     <p><strong>Server:</strong> Asia</p>
                                 </div>
                             </div>
@@ -130,7 +143,10 @@
                                 <img src="https://ditusi.co.id/blog/wp-content/uploads/2025/07/Bundle-Top-Criminal-FF.jpg" alt="Free Fire Banner" class="game-banner">
                                 <div class="game-text">
                                     <p><strong>Nickname:</strong> grab'phee..</p>
-                                    <p><strong>UID / Account ID:</strong> 528464425</p>
+                                    <div class="copy-row">
+                                        <p><strong>UID / Account ID:</strong> 528464425</p>
+                                        <button class="btn-copy" data-copy="528464425" type="button">Salin</button>
+                                    </div>
                                     <p><strong>Guild:</strong> SGNX - Guerilla</p>
                                 </div>
                             </div>
@@ -149,5 +165,9 @@
         <p>&copy; 2026 ydsisnt. All rights reserved.</p>
     </footer>
 
+    <!-- Toast kecil buat notifikasi "ID tersalin!" -->
+    <div id="toast" class="toast">ID tersalin! 📋</div>
+
+    <script src="funfact-script.js"></script>
 </body>
 </html>
