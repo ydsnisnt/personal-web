@@ -62,3 +62,92 @@ copyButtons.forEach((button) => {
     }
   });
 });
+
+
+// ============================================================
+// FITUR TAMBAHAN: SALJU JATUH
+// ============================================================
+// Halaman Fun Facts ini SELALU bertema Fun Mode (nggak ada saklar
+// toggle di sini), jadi salju di halaman ini otomatis "hidup" terus
+// begitu halamannya kebuka -- beda sama index.html yang salju-nya
+// cuma nyala/mati ngikutin mode yang lagi aktif.
+const snowContainer = document.getElementById('snow-container');
+const SNOWFLAKE_CHARS = ['❄', '❅', '❆'];
+const TOTAL_SNOWFLAKES = 40;
+
+function spawnSnow(container, total) {
+  // kalau elemen wadahnya nggak ada di HTML, hentikan supaya nggak error
+  if (!container) return;
+
+  for (let i = 0; i < total; i++) {
+    const flake = document.createElement('span');
+    flake.className = 'snowflake';
+
+    // pilih salah satu bentuk salju secara acak
+    flake.textContent = SNOWFLAKE_CHARS[Math.floor(Math.random() * SNOWFLAKE_CHARS.length)];
+
+    // posisi mendatar acak (0% - 100% lebar layar)
+    flake.style.left = `${Math.random() * 100}vw`;
+
+    // ukuran & kecepatan jatuh acak biar terkesan alami, bukan seragam
+    flake.style.fontSize = `${10 + Math.random() * 14}px`;
+    flake.style.animationDuration = `${6 + Math.random() * 8}s`;
+
+    // delay negatif = seolah animasinya sudah jalan dari tadi,
+    // jadi begitu halaman dibuka salju langsung "berserakan" di
+    // berbagai ketinggian, bukan numpuk semua di atas layar
+    flake.style.animationDelay = `-${Math.random() * 10}s`;
+
+    flake.style.opacity = `${0.4 + Math.random() * 0.6}`;
+
+    container.appendChild(flake);
+  }
+}
+
+// langsung buat saljunya begitu halaman ini dimuat
+spawnSnow(snowContainer, TOTAL_SNOWFLAKES);
+
+
+// ============================================================
+// FITUR TAMBAHAN: EFEK INTERAKTIF 3D TILT
+// ============================================================
+// Sama persis konsepnya dengan yang di script.js (halaman utama):
+// tiap elemen ber-class "tilt-card" dimiringkan mengikuti posisi
+// kursor mouse lewat custom property CSS --rx & --ry.
+function initTiltEffect() {
+  const tiltCards = document.querySelectorAll('.tilt-card');
+  const MAX_TILT_DEGREES = 8; // dibuat lebih kecil dari halaman utama, soalnya kartu di sini lebih banyak & berdempetan
+
+  tiltCards.forEach((card) => {
+    card.addEventListener('mousemove', (event) => {
+      const rect = card.getBoundingClientRect();
+
+      // posisi mouse relatif ke pojok kiri-atas kartu ini
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      // titik tengah kartu
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      // normalisasi jarak dari tengah jadi rentang -1 sampai 1
+      const percentX = (mouseX - centerX) / centerX;
+      const percentY = (mouseY - centerY) / centerY;
+
+      // konversi ke derajat rotasi buat sumbu X & Y
+      const rotateY = percentX * MAX_TILT_DEGREES;
+      const rotateX = percentY * -MAX_TILT_DEGREES;
+
+      card.style.setProperty('--rx', `${rotateX}deg`);
+      card.style.setProperty('--ry', `${rotateY}deg`);
+    });
+
+    // pas kursor keluar dari kartu, balikin ke posisi rata (0deg)
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+    });
+  });
+}
+
+initTiltEffect();

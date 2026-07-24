@@ -8,20 +8,26 @@
 
 /*
   Palet warna di halaman ini SENGAJA disamain persis sama Fun Mode
-  di index.html (background pastel, aksen coral #FF6B6B, teks gelap
-  #2B2D42) -- soalnya halaman ini cuma bisa diakses lewat tombol
-  "Fun Fact About Me" yang cuma muncul pas Fun Mode aktif. Jadi harus
-  berasa nyambung, bukan kayak buka halaman lain yang temanya beda.
+  di index.html. Fun Mode sekarang sudah diganti jadi BIRU CERAH &
+  "bening" (glossy) plus tema salju -- jadi warna di sini pun ikut
+  diganti dari pastel campur-campur jadi biru cerah konsisten,
+  soalnya halaman ini cuma bisa diakses lewat tombol "Fun Fact About
+  Me" yang cuma muncul pas Fun Mode aktif. Harus berasa nyambung,
+  bukan kayak buka halaman lain yang temanya beda.
 */
 body {
-    background: linear-gradient(-45deg, #FFF8F0, #FFE3E3, #E8F9FF, #FFF3B0);
+    /* 4 titik warna biru cerah, sama seperti gradient Fun Mode di
+       style.css -- ada selipan putih (#E0F7FF) biar ada kesan kilau */
+    background: linear-gradient(-45deg, #00C6FB, #005BEA, #E0F7FF, #2979FF);
     background-size: 400% 400%;
     animation: gradientBG 18s ease infinite;
     background-attachment: fixed;
-    color: #2B2D42;
+    color: #ffffff;               /* teks putih, kontras di atas biru cerah */
     font-family: 'Poppins', 'Inter', sans-serif;
     min-height: 100vh;
     padding: 100px 20px 40px;
+    position: relative;           /* dibutuhkan supaya overlay & salju di bawah bisa "nempel" pas di belakang konten */
+    overflow-x: hidden;           /* jaga-jaga biar salju yang jatuh nggak bikin scrollbar horizontal muncul */
 }
 
 @keyframes gradientBG {
@@ -41,33 +47,34 @@ body {
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    background: rgba(255, 248, 240, 0.6);
+    /* header kaca biru transparan, senada sama gradient body yang baru */
+    background: rgba(0, 91, 234, 0.28);
     backdrop-filter: blur(10px);
 }
 
 .btn-back {
     text-decoration: none;
-    color: #2B2D42;
+    color: #ffffff;
     font-size: 0.85rem;
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 20px;
-    background: rgba(43, 45, 66, 0.06);
-    border: 1px solid rgba(43, 45, 66, 0.12);
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transition: 0.3s ease;
 }
 
 .btn-back:hover {
-    background: #FF6B6B;
-    border-color: #FF6B6B;
-    color: #ffffff;
+    background: #00E5FF;
+    border-color: #00E5FF;
+    color: #003049; /* teks navy gelap dipakai khusus di sini biar tetap kebaca di atas cyan terang */
 }
 
 .logo {
     font-weight: 800;
     font-size: 0.9rem;
     letter-spacing: 3px;
-    color: #4A6572;
+    color: #DFF6FF;
 }
 
 /* CONTAINER UTAMA */
@@ -82,14 +89,14 @@ body {
     font-weight: 800;
     letter-spacing: 2px;
     margin-bottom: 10px;
-    background: linear-gradient(180deg, #2B2D42 40%, #FF6B6B 100%);
+    background: linear-gradient(180deg, #ffffff 40%, #00E5FF 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .ff-subtitle {
     font-size: 0.85rem;
-    color: #4A6572;
+    color: #DFF6FF;
     margin-bottom: 35px;
     font-weight: 300;
 }
@@ -105,16 +112,16 @@ body {
 
 .ff-accordion {
     background: rgba(255, 255, 255, 0.55);
-    border: 1px solid rgba(43, 45, 66, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     overflow: hidden;
     backdrop-filter: blur(15px);
-    box-shadow: 0 10px 25px rgba(43, 45, 66, 0.08);
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.08);
     transition: all 0.3s ease;
 }
 
 .ff-accordion:hover {
-    border-color: #FF6B6B;
+    border-color: #00E5FF;
     background: rgba(255, 255, 255, 0.75);
 }
 
@@ -145,28 +152,28 @@ body {
 .accordion-header h2 {
     font-size: 1rem;
     font-weight: 600;
-    color: #2B2D42;
+    color: #ffffff;
 }
 
 .arrow-icon {
     font-size: 0.9rem;
-    color: #4A6572;
+    color: #DFF6FF;
     transition: transform 0.3s ease;
 }
 
 details[open] .arrow-icon {
     transform: rotate(90deg);
-    color: #FF6B6B;
+    color: #00E5FF;
 }
 
 details[open] .accordion-header {
-    border-bottom: 1px solid rgba(43, 45, 66, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .accordion-body {
     padding: 20px 24px;
     text-align: left;
-    background: rgba(43, 45, 66, 0.03);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .accordion-body ul {
@@ -176,7 +183,7 @@ details[open] .accordion-header {
 .accordion-body li {
     font-size: 0.9rem;
     margin-bottom: 10px;
-    color: #2B2D42;
+    color: #ffffff;
 }
 
 .accordion-body li:last-child {
@@ -184,7 +191,7 @@ details[open] .accordion-header {
 }
 
 .accordion-body li span {
-    color: #FF6B6B;
+    color: #00E5FF;
     font-weight: 600;
     margin-right: 8px;
 }
@@ -200,21 +207,21 @@ details[open] .accordion-header {
 
 .game-details {
     background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(43, 45, 66, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
 .game-details:hover {
-    border-color: #FF6B6B;
+    border-color: #00E5FF;
 }
 
 .game-summary {
     padding: 12px 16px;
     font-size: 0.88rem;
     font-weight: 600;
-    color: #FF6B6B;
+    color: #00E5FF;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -229,29 +236,29 @@ details[open] .accordion-header {
 
 .arrow-icon-small {
     font-size: 0.75rem;
-    color: #4A6572;
+    color: #DFF6FF;
     transition: transform 0.3s ease;
 }
 
 details[open] > .game-summary .arrow-icon-small {
     transform: rotate(90deg);
-    color: #FF6B6B;
+    color: #00E5FF;
 }
 
 /* Kotak Info ID & Nickname Game */
 .game-info {
     padding: 12px 16px;
-    background: rgba(43, 45, 66, 0.03);
-    border-top: 1px solid rgba(43, 45, 66, 0.05);
+    background: rgba(255, 255, 255, 0.03);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 0.85rem;
-    color: #2B2D42;
+    color: #ffffff;
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
 .game-info p strong {
-    color: #4A6572;
+    color: #DFF6FF;
 }
 
 /* ==========================================
@@ -268,9 +275,9 @@ details[open] > .game-summary .arrow-icon-small {
 
 .btn-copy {
     flex-shrink: 0;
-    background: rgba(255, 107, 107, 0.12);
-    color: #FF6B6B;
-    border: 1px solid rgba(255, 107, 107, 0.3);
+    background: rgba(0, 229, 255, 0.16);
+    color: #00E5FF;
+    border: 1px solid rgba(0, 229, 255, 0.4);
     border-radius: 8px;
     padding: 4px 10px;
     font-size: 0.7rem;
@@ -281,8 +288,8 @@ details[open] > .game-summary .arrow-icon-small {
 }
 
 .btn-copy:hover {
-    background: #FF6B6B;
-    color: #ffffff;
+    background: #00E5FF;
+    color: #003049; /* navy gelap biar teks tombol tetap kebaca di atas cyan terang */
 }
 
 /* Toast notifikasi kecil pas ID berhasil di-copy */
@@ -291,7 +298,7 @@ details[open] > .game-summary .arrow-icon-small {
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%) translateY(20px);
-    background: #2B2D42;
+    background: #072B4F;  /* navy gelap -- sengaja beda dari bg biru cerah biar toast-nya tetap menonjol/kebaca */
     color: #ffffff;
     padding: 10px 22px;
     border-radius: 30px;
@@ -315,6 +322,134 @@ details[open] > .game-summary .arrow-icon-small {
     text-align: center;
     font-size: 0.75rem;
     letter-spacing: 2px;
-    color: #4A6572;
+    color: #DFF6FF;
     opacity: 0.7;
+}
+
+/* ==========================================
+   FITUR TAMBAHAN: OVERLAY BLUR DI BACKGROUND
+   ==========================================
+   Halaman ini SELALU bertema Fun Mode (nggak ada toggle), jadi
+   overlay blur & salju langsung aktif terus (nggak perlu dicek
+   lewat class body kayak di index.html). Ini lapisan penuh layar
+   yang bikin gradient biru di baliknya jadi buram lembut, kesan
+   "kaca es". Ditaruh DI ATAS gradient tapi DI BAWAH konten. */
+.bg-blur-overlay {
+    position: fixed;
+    inset: 0;                 /* shortcut buat top/right/bottom/left: 0 */
+    z-index: 0;
+    pointer-events: none;      /* jangan sampai nge-block klik ke tombol/accordion */
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* ==========================================
+   FITUR TAMBAHAN: PARTIKEL SALJU JATUH
+   ==========================================
+   Wadah penuh layar berisi banyak <span> salju yang dibuat otomatis
+   lewat funfact-script.js. Wadah dan tiap keping salju sama-sama
+   "pointer-events: none" biar nggak menghalangi klik ke elemen lain. */
+.snow-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1;                /* di atas overlay blur, di bawah konten (.ff-header, .ff-container punya z-index sendiri) */
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.snowflake {
+    position: absolute;
+    top: -10vh;
+    color: #ffffff;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.85);
+    user-select: none;
+    animation-name: snow-fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes snow-fall {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0.9;
+    }
+    50% {
+        transform: translateY(55vh) translateX(20px) rotate(180deg);
+    }
+    100% {
+        transform: translateY(115vh) translateX(-15px) rotate(360deg);
+        opacity: 0.7;
+    }
+}
+
+/* Konten utama (header & container) harus tetap di atas overlay & salju */
+.ff-header,
+.ff-container {
+    position: relative;
+    z-index: 10;
+}
+
+/* ==========================================
+   FITUR TAMBAHAN: KARTU DENGAN EFEK 3D TILT
+   ==========================================
+   Sama seperti di index.html: elemen dengan class "tilt-card" akan
+   dimiringkan mengikuti posisi mouse lewat funfact-script.js, yang
+   mengatur custom property --rx & --ry ini secara real-time. */
+.tilt-card {
+    --rx: 0deg;
+    --ry: 0deg;
+    transform: perspective(700px) rotateX(var(--rx)) rotateY(var(--ry));
+    transition: transform 0.25s ease-out;
+    will-change: transform;
+}
+
+/* ==========================================
+   FITUR TAMBAHAN: TOMBOL WHATSAPP MENGAMBANG
+   ==========================================
+   Sama seperti di index.html, biar orang yang lagi di halaman Fun
+   Facts ini juga bisa langsung chat tanpa harus balik ke halaman utama. */
+.btn-whatsapp-float {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 500;
+
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #25D366;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.6rem;
+
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.45);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-whatsapp-float:hover {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 14px 30px rgba(37, 211, 102, 0.6);
+}
+
+.btn-whatsapp-float::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #25D366;
+    animation: wa-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes wa-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.6; }
 }

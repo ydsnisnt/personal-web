@@ -14,43 +14,54 @@
    lewat CSS Custom Properties".
 */
 
-/* Mode Profesional: CRIMSON VELVET DINAMIS (gelap & serius) */
+/* Mode Profesional: RED GLASS BRIGHT (merah cerah & "bening"/glossy)
+   ----------------------------------------------------------------
+   Sebelumnya warnanya maroon gelap & serius. Sekarang diganti jadi
+   merah yang jauh lebih cerah/terang, dan semua elemen kaca (card,
+   glass, tombol) dibikin lebih transparan + blur biar kesannya
+   "bening" kayak kaca, bukan solid. */
 body.theme-maroon {
-    background: linear-gradient(-45deg, #2C0F12, #6B1E23, #150708, #4a1218);
+    /* 4 titik warna merah cerah yang saling gradasi & bergerak pelan.
+       Ada selipan putih (#FFE8E8) di tengah supaya ada kesan "kilau"
+       terang, bukan cuma merah polos dari ujung ke ujung. */
+    background: linear-gradient(-45deg, #FF3B30, #FF6B6B, #FFE8E8, #FF1F4E);
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
 
-    --card-bg: rgba(44, 15, 18, 0.6);
-    --glass-bg: rgba(255, 255, 255, 0.08);      /* kaca terang di atas bg gelap */
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --track-bg: rgba(255, 255, 255, 0.15);       /* warna dasar switch/toggle */
-    --track-border: rgba(255, 255, 255, 0.25);
-    --text-color: #ffffff;
-    --accent-color: #e63946;
-    --accent-glow: rgba(230, 57, 70, 0.5);
-    --subtext-color: #d8a7b1;
-    --title-gradient-start: #ffffff;             /* gradasi judul: putih -> subtext */
+    /* --card-bg dibikin putih transparan tipis (bukan gelap lagi)
+       supaya kartu/panel keliatan seperti kaca bening di atas
+       gradient merah, bukan kotak solid gelap yang menutupi warna */
+    --card-bg: rgba(255, 255, 255, 0.28);
+    --glass-bg: rgba(255, 255, 255, 0.16);      /* lapisan kaca tipis di atas bg terang */
+    --glass-border: rgba(255, 255, 255, 0.45);   /* garis tepi kaca, terang & jelas */
+    --track-bg: rgba(255, 255, 255, 0.3);        /* warna dasar switch/toggle */
+    --track-border: rgba(255, 255, 255, 0.45);
+    --text-color: #ffffff;                       /* teks tetap putih, kontras di atas merah */
+    --accent-color: #FF1F4E;                      /* merah-pink terang buat hover/aksen */
+    --accent-glow: rgba(255, 31, 78, 0.55);
+    --subtext-color: #FFD9DC;                     /* merah muda pucat buat teks sekunder */
+    --title-gradient-start: #ffffff;              /* gradasi judul: putih -> subtext */
 }
 
-/* Mode Fun: SUNRISE PASTEL (cerah, simpel, minimalist) */
+/* Mode Fun: FROSTY BLUE BRIGHT (biru cerah & "bening"/glossy, tema salju) */
 body.theme-blue {
-    /* Latar terang lembut -- 4 titik warna pastel yang berpindah pelan,
-       tetap pakai animasi yang sama seperti mode profesional, cuma
-       paletnya kita balik jadi cerah */
-    background: linear-gradient(-45deg, #FFF8F0, #FFE3E3, #E8F9FF, #FFF3B0);
+    /* Diganti dari pastel campur-campur jadi biru cerah konsisten,
+       biar berasa "dingin & bening" -- cocok buat dipasangin sama
+       efek salju & blur yang kita tambahin di bawah */
+    background: linear-gradient(-45deg, #00C6FB, #005BEA, #E0F7FF, #2979FF);
     background-size: 400% 400%;
     animation: gradientBG 18s ease infinite;
 
-    --card-bg: rgba(255, 255, 255, 0.55);
-    --glass-bg: rgba(43, 45, 66, 0.05);          /* kaca gelap tipis di atas bg terang */
-    --glass-border: rgba(43, 45, 66, 0.12);
-    --track-bg: rgba(43, 45, 66, 0.12);
-    --track-border: rgba(43, 45, 66, 0.18);
-    --text-color: #2B2D42;                       /* teks gelap, karena bg-nya terang */
-    --accent-color: #FF6B6B;                      /* coral -- ceria tapi tetep soft */
-    --accent-glow: rgba(255, 107, 107, 0.35);
-    --subtext-color: #4A6572;
-    --title-gradient-start: #2B2D42;
+    --card-bg: rgba(255, 255, 255, 0.3);
+    --glass-bg: rgba(255, 255, 255, 0.16);       /* kaca terang tipis di atas bg biru */
+    --glass-border: rgba(255, 255, 255, 0.45);
+    --track-bg: rgba(255, 255, 255, 0.3);
+    --track-border: rgba(255, 255, 255, 0.45);
+    --text-color: #ffffff;                        /* teks putih, kontras di atas biru cerah */
+    --accent-color: #00E5FF;                       /* cyan terang -- aksen "es/salju" */
+    --accent-glow: rgba(0, 229, 255, 0.55);
+    --subtext-color: #DFF6FF;                      /* biru sangat muda buat teks sekunder */
+    --title-gradient-start: #ffffff;
 }
 
 /* ==========================================
@@ -375,4 +386,212 @@ body.theme-blue .btn-funfact {
         transform: translateY(100vh) rotate(360deg);
         opacity: 0;
     }
+}
+
+/* ==========================================
+   12. KARTU DENGAN EFEK 3D TILT (MIRING IKUT MOUSE)
+   ==========================================
+   Elemen apa pun yang dikasih class "tilt-card" akan dipantau
+   pergerakan mouse-nya lewat script.js. JS bakal ngitung posisi
+   kursor relatif ke tengah kartu, terus set custom property
+   --rx (rotateX) dan --ry (rotateY) lewat style.setProperty().
+   Di sinilah custom property itu "dipakai" jadi transform beneran. */
+.tilt-card {
+    /* nilai default 0deg kalau JS belum sempat jalan / mouse di luar */
+    --rx: 0deg;
+    --ry: 0deg;
+
+    /* perspective() bikin efek 3D biar rotateX/Y kerasa "nembus" layar,
+       bukan cuma gepeng. Angka kecil (600px) = efek makin dramatis,
+       angka besar = efek makin halus/subtle */
+    transform: perspective(600px) rotateX(var(--rx)) rotateY(var(--ry));
+
+    /* transition cuma dipasang buat transform, biar pas mouse KELUAR
+       dari kartu dia balik ke posisi normal secara halus (bukan patah) */
+    transition: transform 0.25s ease-out;
+    will-change: transform; /* kasih tau browser bagian ini sering berubah, biar dioptimasi */
+}
+
+/* ==========================================
+   13. TOMBOL WHATSAPP MENGAMBANG (FLOATING ACTION BUTTON)
+   ==========================================
+   Muncul di semua halaman (index & funfact), nempel di pojok
+   kanan-bawah layar, dan tetap kelihatan walau di-scroll (fixed). */
+.btn-whatsapp-float {
+    position: fixed;           /* nempel di layar, nggak ikut scroll */
+    bottom: 28px;
+    right: 28px;
+    z-index: 500;              /* di atas konten lain, tapi di bawah toast (999) */
+
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;        /* bulat sempurna */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #25D366;       /* hijau khas WhatsApp */
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.6rem;
+
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.45);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-whatsapp-float:hover {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 14px 30px rgba(37, 211, 102, 0.6);
+}
+
+/* titik hijau kecil yang "berdenyut" di pojok tombol, kesan "online" */
+.btn-whatsapp-float::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #25D366;
+    animation: wa-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes wa-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+/* ==========================================
+   14. WIDGET "NOW PLAYING" -- BUNGKUS EMBED SPOTIFY
+   ==========================================
+   Ini cuma bungkusan visual (kartu kaca) di sekitar <iframe> Spotify,
+   supaya nyambung sama tema glassmorphism di seluruh web ini.
+   Iframe Spotify sendiri sudah dikasih tampilan dari pihak Spotify,
+   jadi kita cuma perlu bikin "pigura" kaca di sekitarnya. */
+.spotify-widget {
+    margin-top: 30px;
+    width: 100%;
+    max-width: 340px;
+
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 14px;
+
+    backdrop-filter: blur(15px);   /* efek kaca buram khas glassmorphism */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.spotify-widget-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--subtext-color);
+    margin-bottom: 10px;
+    text-align: left;
+    padding-left: 4px;
+}
+
+/* iframe Spotify dibikin lebar penuh mengikuti kartu pembungkusnya */
+.spotify-widget iframe {
+    width: 100%;
+    border-radius: 12px;   /* Spotify sendiri punya radius, ini cuma jaga-jaga */
+    border: none;          /* hilangkan garis tepi default iframe */
+}
+
+/* ==========================================
+   15. OVERLAY BLUR DI BACKGROUND (KHUSUS FUN MODE)
+   ==========================================
+   Lapisan penuh layar yang taruh DI ATAS gradient animasi tapi DI
+   BAWAH konten. backdrop-filter: blur() disini bikin gradient warna
+   di baliknya jadi buram lembut -- efek "kaca es/frosty glass" biar
+   makin nyambung sama tema salju di Fun Mode. */
+.bg-blur-overlay {
+    position: fixed;
+    inset: 0;               /* shortcut buat top:0; right:0; bottom:0; left:0; */
+    z-index: 0;              /* paling belakang, di bawah header/hero/footer */
+    pointer-events: none;    /* jangan sampai nge-block klik ke tombol di atasnya */
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    opacity: 0;               /* default nggak aktif (dipakai di Professional Mode) */
+    transition: opacity 0.6s ease;
+}
+
+/* overlay blur cuma "dinyalakan" (opacity 1) pas Fun Mode aktif */
+body.theme-blue .bg-blur-overlay {
+    opacity: 1;
+}
+
+/* ==========================================
+   16. PARTIKEL SALJU JATUH (KHUSUS FUN MODE)
+   ==========================================
+   Wadah penuh layar berisi banyak <span> salju (dibuat otomatis
+   lewat script.js). Wadahnya sendiri "pointer-events: none" supaya
+   salju nggak menghalangi klik ke tombol/link di bawahnya. */
+.snow-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1;              /* di atas overlay blur, tapi di bawah konten utama */
+    pointer-events: none;
+    overflow: hidden;
+
+    opacity: 0;               /* default tersembunyi, cuma tampil di Fun Mode */
+    transition: opacity 0.6s ease;
+}
+
+body.theme-blue .snow-container {
+    opacity: 1;
+}
+
+/* satu keping salju individual -- posisinya diatur random lewat
+   inline style dari JavaScript (left, animation-duration, dst) */
+.snowflake {
+    position: absolute;
+    top: -10vh;               /* mulai dari sedikit di atas layar */
+    color: #ffffff;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+    user-select: none;
+    animation-name: snow-fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;  /* salju jatuh terus-menerus, looping */
+
+    /* default: animasi di-PAUSE. Salju sebenarnya tetap ada di DOM
+       walau lagi di Professional Mode, tapi nggak "jalan" -- jadi
+       nggak makan CPU/GPU sia-sia pas nggak keliatan */
+    animation-play-state: paused;
+}
+
+/* animasi salju baru "dijalankan" pas Fun Mode aktif */
+body.theme-blue .snowflake {
+    animation-play-state: running;
+}
+
+@keyframes snow-fall {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0.9;
+    }
+    50% {
+        /* sedikit "goyang" ke samping di tengah animasi, biar nggak
+           jatuh lurus kaku kayak garis lurus -- lebih natural */
+        transform: translateY(55vh) translateX(20px) rotate(180deg);
+    }
+    100% {
+        transform: translateY(115vh) translateX(-15px) rotate(360deg);
+        opacity: 0.7;
+    }
+}
+
+/* Pastikan konten utama (header, hero, footer) tetap di atas
+   overlay blur & salju, supaya nggak ketutupan */
+.main-header,
+.hero-container,
+.main-footer {
+    position: relative;
+    z-index: 10;
 }

@@ -156,6 +156,145 @@ function spawnConfetti() {
 
 
 // ============================================================
+// FITUR TAMBAHAN 3: SALJU JATUH (KHUSUS FUN MODE)
+// ============================================================
+// Ambil elemen wadah salju yang sudah disiapkan di index.html.
+// "?" di belakang nggak dipakai di sini karena kita mau JS ini
+// tetap aman dijalankan meskipun elemennya belum tentu ada
+// (makanya nanti kita bungkus pemanggilannya pakai "if").
+const snowContainer = document.getElementById('snow-container');
+
+// Kumpulan karakter salju -- dicampur beberapa biar variatif,
+// nggak monoton cuma satu bentuk keping salju terus.
+const SNOWFLAKE_CHARS = ['❄', '❅', '❆'];
+
+// Total keping salju yang mau dibuat. Nggak usah kebanyakan,
+// soalnya makin banyak elemen DOM = makin berat buat browser.
+const TOTAL_SNOWFLAKES = 45;
+
+// ------------------------------------------------------------
+// spawnSnow(container, total)
+// Fungsi ini bikin sejumlah <span class="snowflake"> lalu
+// menaruhnya ke dalam elemen wadah (container). Posisi mendatar,
+// ukuran huruf, kecepatan jatuh, dan jeda animasi masing-masing
+// keping dibuat ACAK (Math.random) biar keliatan natural --
+// nggak semua salju jatuh bareng & lurus kayak barisan tentara.
+// ------------------------------------------------------------
+function spawnSnow(container, total) {
+  // kalau container-nya nggak ketemu di halaman ini (misal script
+  // ini kepasang di halaman yang nggak punya #snow-container),
+  // langsung berhenti -- daripada nanti error null.appendChild()
+  if (!container) return;
+
+  for (let i = 0; i < total; i++) {
+    // bikin satu elemen <span> kosong buat 1 keping salju
+    const flake = document.createElement('span');
+    flake.className = 'snowflake';
+
+    // isi teksnya salah satu karakter salju secara acak
+    flake.textContent = SNOWFLAKE_CHARS[Math.floor(Math.random() * SNOWFLAKE_CHARS.length)];
+
+    // posisi horizontal (kiri-kanan) acak dari 0% sampai 100% lebar layar
+    flake.style.left = `${Math.random() * 100}vw`;
+
+    // ukuran huruf salju acak antara 10px - 24px, biar ada yang
+    // "dekat" (gede) dan ada yang "jauh" (kecil), kesan kedalaman
+    flake.style.fontSize = `${10 + Math.random() * 14}px`;
+
+    // kecepatan jatuh acak antara 6 - 14 detik per satu putaran animasi
+    flake.style.animationDuration = `${6 + Math.random() * 8}s`;
+
+    // delay NEGATIF supaya pas animasi baru "running", posisi tiap
+    // salju langsung beda-beda (seolah animasinya sudah berjalan
+    // dari tadi) -- bukan malah semua salju mulai bareng dari atas
+    flake.style.animationDelay = `-${Math.random() * 10}s`;
+
+    // transparansi acak, biar sebagian salju keliatan "di kejauhan"
+    flake.style.opacity = `${0.4 + Math.random() * 0.6}`;
+
+    // terakhir, masukkan keping salju ini ke dalam wadahnya di HTML
+    container.appendChild(flake);
+  }
+}
+
+// Salju langsung dibuat sekali aja pas halaman pertama kali dibuka.
+// Kita nggak perlu bikin ulang tiap kali toggle mode di-klik, karena
+// tampil/nggaknya salju sudah otomatis diatur lewat CSS (opacity +
+// animation-play-state yang nempel ke class "body.theme-blue" --
+// lihat style.css bagian 16). Jadi JS di sini cukup "menyiapkan
+// barang"-nya sekali di awal, sisanya CSS yang atur kapan kelihatan.
+spawnSnow(snowContainer, TOTAL_SNOWFLAKES);
+
+
+// ============================================================
+// FITUR TAMBAHAN 4: EFEK INTERAKTIF 3D TILT
+// ============================================================
+// Elemen apa pun yang dikasih class "tilt-card" di HTML (misalnya
+// kartu hero & widget Spotify) akan "dimiringkan" mengikuti posisi
+// kursor mouse, seolah-olah kartunya punya kedalaman 3 dimensi.
+//
+// Caranya: setiap kali mouse bergerak DI ATAS kartu, kita hitung
+// seberapa jauh posisi kursor dari titik TENGAH kartu (baik secara
+// horizontal maupun vertikal), lalu ubah jarak itu jadi derajat
+// rotasi lewat CSS custom property --rx (rotate sumbu X) dan
+// --ry (rotate sumbu Y) yang sudah disiapkan di style.css.
+function initTiltEffect() {
+  // ambil SEMUA elemen yang punya class "tilt-card" di halaman ini
+  const tiltCards = document.querySelectorAll('.tilt-card');
+
+  // sudut kemiringan maksimum (dalam derajat). Semakin besar angka
+  // ini, semakin "ekstrem" efek miringnya pas mouse di pinggir kartu.
+  const MAX_TILT_DEGREES = 10;
+
+  tiltCards.forEach((card) => {
+    // EVENT: mouse bergerak di atas kartu
+    card.addEventListener('mousemove', (event) => {
+      // getBoundingClientRect() ngasih tau posisi & ukuran kartu
+      // ini relatif terhadap layar (viewport) saat ini
+      const rect = card.getBoundingClientRect();
+
+      // posisi kursor mouse relatif terhadap SISI KIRI-ATAS kartu
+      // (bukan relatif ke layar), makanya dikurangi rect.left/top
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      // titik tengah kartu secara horizontal & vertikal
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      // seberapa jauh mouse dari titik tengah, dinormalisasi jadi
+      // rentang angka -1 (paling kiri/atas) sampai 1 (paling kanan/bawah)
+      const percentX = (mouseX - centerX) / centerX;
+      const percentY = (mouseY - centerY) / centerY;
+
+      // ubah persentase jarak itu jadi derajat rotasi.
+      // - gerak mouse ke KANAN-KIRI -> memutar kartu pada sumbu Y
+      // - gerak mouse ke ATAS-BAWAH -> memutar kartu pada sumbu X
+      //   (dikasih tanda minus di rotateX supaya arah miringnya
+      //   terasa "natural", seolah kartu mengikuti ujung kursor)
+      const rotateY = percentX * MAX_TILT_DEGREES;
+      const rotateX = percentY * -MAX_TILT_DEGREES;
+
+      // pasang nilai derajat ini ke custom property --rx / --ry.
+      // Custom property inilah yang langsung "dibaca" oleh CSS
+      // (lihat .tilt-card di style.css: transform: ... rotateX(var(--rx)) ...)
+      card.style.setProperty('--rx', `${rotateX}deg`);
+      card.style.setProperty('--ry', `${rotateY}deg`);
+    });
+
+    // EVENT: mouse keluar dari area kartu -> balikin ke posisi normal (0deg)
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+    });
+  });
+}
+
+// langsung jalankan fungsinya sekali begitu script ini dimuat
+initTiltEffect();
+
+
+// ============================================================
 // IDE FITUR LAIN buat kamu kembangkan sendiri (belum diimplementasi):
 // - Web Share API: tombol "Share" yang buka share sheet HP
 //   (navigator.share) buat nge-share link web ini langsung dari HP

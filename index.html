@@ -14,6 +14,16 @@
 -->
 <body class="theme-maroon">
 
+    <!--
+      LAPISAN DEKORASI BACKGROUND (blur + salju).
+      Ditaruh paling atas di dalam <body> supaya secara urutan DOM dia
+      "di bawah" konten lain, tapi z-index-nya sudah diatur lewat CSS
+      (lihat style.css bagian 15 & 16) supaya tetap ada DI ATAS gradient
+      background namun DI BAWAH header/hero/footer.
+    -->
+    <div id="bg-blur-overlay" class="bg-blur-overlay"></div>
+    <div id="snow-container" class="snow-container"></div>
+
     <!-- HEADER UTAMA -->
     <header class="main-header">
         <!-- Brand / Logo Kiri Atas -->
@@ -48,7 +58,12 @@
     </header>
 
     <!-- KONTEN UTAMA (HERO SECTION DESAIN MINIMALIS) -->
-    <main class="hero-container">
+    <main class="hero-container tilt-card">
+        <!--
+          class "tilt-card" ditambahin di sini supaya seluruh blok hero
+          (judul + subjudul) ikut miring 3D ngikutin posisi mouse.
+          Logikanya ada di script.js -> fungsi initTiltEffect().
+        -->
 
         <!--
           FIX: dulu elemen-elemen ini belum ada padahal script.js & style.css
@@ -66,10 +81,60 @@
             <a href="funfact.html" id="btn-funfact" class="btn-funfact">Fun Fact About Me</a>
         </div>
 
+        <!--
+          WIDGET "NOW PLAYING" -- EMBED SPOTIFY MINI PLAYER
+          ==================================================
+          Ini nampilin lagu favorit langsung dari Spotify pakai
+          <iframe> resmi mereka (fitur "Embed" yang Spotify sediakan,
+          bukan hosting file musik sendiri).
+
+          CARA GANTI KE LAGU FAVORIT KAMU SENDIRI:
+          1. Buka lagunya di app/situs Spotify
+          2. Klik titik tiga (...) -> Share -> Copy embed code / Copy link lagu
+          3. Dari link itu, ambil bagian ID-nya. Contoh:
+             https://open.spotify.com/track/ISI_ID_LAGU_DI_SINI
+          4. Ganti ID di URL "src" bawah ini (yang sekarang isinya
+             lagu "love." dari wave to earth, sesuai daftar favoritmu
+             di halaman Fun Facts) dengan ID lagu pilihanmu.
+        -->
+        <div class="spotify-widget tilt-card">
+            <p class="spotify-widget-label">🎧 Now Playing</p>
+            <iframe
+                title="Spotify mini player - lagu favorit"
+                src="https://open.spotify.com/embed/track/5mtTAScDytxMMqZj14NmlN?utm_source=generator&theme=0"
+                width="100%"
+                height="152"
+                frameborder="0"
+                allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy">
+            </iframe>
+        </div>
+
     </main>
     <footer class="main-footer">
         <p>&copy; 2026 ydsisnt. All rights reserved.</p>
     </footer>
+
+    <!--
+      TOMBOL WHATSAPP MENGAMBANG (QUICK CONTACT)
+      ===========================================
+      Ditaruh di luar <main>/<header>/<footer> supaya posisinya
+      "fixed" murni ke layar (nggak kepengaruh layout elemen lain),
+      dan tetap kelihatan di halaman mana pun user lagi scroll.
+
+      GANTI NOMOR WHATSAPP-NYA:
+      Format link wa.me HARUS pakai kode negara tanpa tanda "+" atau "0"
+      di depan. Contoh nomor Indonesia 0812-3456-7890 -> jadi 6281234567890.
+      Teks setelah "?text=" itu pesan otomatis yang udah keisi duluan
+      pas orang buka chat-nya (opsional, boleh dihapus kalau nggak perlu).
+    -->
+    <a
+        href="https://wa.me/6283140664585?text=Halo%20ydsisnt%2C%20aku%20lihat%20web%20kamu%21"
+        target="_blank"
+        rel="noopener"
+        class="btn-whatsapp-float"
+        aria-label="Chat lewat WhatsApp">💬</a>
 
     <script src="script.js"></script>
 </body>

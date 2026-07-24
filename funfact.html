@@ -8,6 +8,14 @@
 </head>
 <body>
 
+    <!--
+      LAPISAN DEKORASI BACKGROUND (blur + salju), sama seperti di
+      index.html Fun Mode. Halaman ini memang selalu bertema biru,
+      jadi efeknya langsung aktif tanpa perlu dicek mode apa pun.
+    -->
+    <div id="bg-blur-overlay" class="bg-blur-overlay"></div>
+    <div id="snow-container" class="snow-container"></div>
+
     <!-- Header dengan Tombol Kembali -->
     <header class="ff-header">
         <a href="index.html" class="btn-back">← Back</a>
@@ -23,7 +31,7 @@
         <div class="accordion-wrapper">
 
             <!-- KATEGORI 1: TOP MOVIES -->
-            <details class="ff-accordion">
+            <details class="ff-accordion tilt-card">
                 <summary class="accordion-header">
                     <div class="header-content">
                         <span class="card-icon">🎬</span>
@@ -41,7 +49,7 @@
             </details>
 
             <!-- KATEGORI 2: TOP SONGS -->
-            <details class="ff-accordion">
+            <details class="ff-accordion tilt-card">
                 <summary class="accordion-header">
                     <div class="header-content">
                         <span class="card-icon">🎧</span>
@@ -55,11 +63,33 @@
                         <li><span>2.</span> Joji - Glimpse of Us</li>
                         <li><span>3.</span> Skyline - Not the same without you</li>
                     </ul>
+
+                    <!--
+                      WIDGET SPOTIFY DI SINI JUGA:
+                      biar pas orang buka bagian "Top Songs" ini,
+                      mereka bisa langsung dengerin lagu no.1-nya
+                      tanpa pindah ke halaman utama. Ganti ID lagu di
+                      "src" kalau mau nampilin lagu favorit lain --
+                      caranya sama kayak yang dijelasin di index.html.
+                    -->
+                    <div class="spotify-widget tilt-card" style="margin-top: 16px; max-width: 100%;">
+                        <p class="spotify-widget-label">🎧 Now Playing</p>
+                        <iframe
+                            title="Spotify mini player - lagu favorit"
+                            src="https://open.spotify.com/embed/track/5mtTAScDytxMMqZj14NmlN?utm_source=generator&theme=0"
+                            width="100%"
+                            height="152"
+                            frameborder="0"
+                            allowfullscreen=""
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                            loading="lazy">
+                        </iframe>
+                    </div>
                 </div>
             </details>
 
             <!-- KATEGORI 3: HOBBIES -->
-            <details class="ff-accordion">
+            <details class="ff-accordion tilt-card">
                 <summary class="accordion-header">
                     <div class="header-content">
                         <span class="card-icon">🏃‍♂️</span>
@@ -77,7 +107,7 @@
             </details>
 
             <!-- KATEGORI 4: GAMES -->
-            <details class="ff-accordion">
+            <details class="ff-accordion tilt-card">
                 <summary class="accordion-header">
                     <div class="header-content">
                         <span class="card-icon">🎮</span>
@@ -167,6 +197,19 @@
 
     <!-- Toast kecil buat notifikasi "ID tersalin!" -->
     <div id="toast" class="toast">ID tersalin! 📋</div>
+
+    <!--
+      TOMBOL WHATSAPP MENGAMBANG -- sama kayak di index.html, biar
+      pengunjung yang lagi baca-baca Fun Facts bisa langsung chat
+      tanpa harus balik dulu ke halaman utama.
+      JANGAN LUPA ganti nomor WA-nya, sama seperti catatan di index.html.
+    -->
+    <a
+        href="https://wa.me/6281234567890?text=Halo%20ydsisnt%2C%20aku%20lihat%20web%20kamu%21"
+        target="_blank"
+        rel="noopener"
+        class="btn-whatsapp-float"
+        aria-label="Chat lewat WhatsApp">💬</a>
 
     <script src="funfact-script.js"></script>
 </body>
