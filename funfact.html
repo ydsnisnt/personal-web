@@ -31,7 +31,7 @@
         <div class="accordion-wrapper">
 
             <!-- KATEGORI 1: TOP MOVIES -->
-            <details class="ff-accordion tilt-card">
+            <details class="ff-accordion">
                 <summary class="accordion-header">
                     <div class="header-content">
                         <span class="card-icon">🎬</span>
@@ -49,7 +49,7 @@
             </details>
 
             <!-- KATEGORI 2: TOP SONGS -->
-            <details class="ff-accordion tilt-card">
+            <details class="ff-accordion">
                 <summary class="accordion-header">
                     <div class="header-content">
                         <span class="card-icon">🎧</span>
@@ -65,16 +65,25 @@
                     </ul>
 
                     <!--
-                      WIDGET SPOTIFY DI SINI JUGA:
+                      WIDGET SPOTIFY DI SINI JUGA (MULTI-LAGU):
                       biar pas orang buka bagian "Top Songs" ini,
-                      mereka bisa langsung dengerin lagu no.1-nya
-                      tanpa pindah ke halaman utama. Ganti ID lagu di
-                      "src" kalau mau nampilin lagu favorit lain --
-                      caranya sama kayak yang dijelasin di index.html.
+                      mereka bisa langsung dengerin & GANTI-GANTI lagu
+                      lewat tombol tab, nggak cuma 1 lagu doang.
+                      Logikanya sama persis kayak di index.html --
+                      lihat komentar lengkap di sana kalau mau nambah
+                      lagu baru ke daftar tab-nya.
                     -->
-                    <div class="spotify-widget tilt-card" style="margin-top: 16px; max-width: 100%;">
+                    <div class="spotify-widget" style="margin-top: 16px;">
                         <p class="spotify-widget-label">🎧 Now Playing</p>
+
+                        <div class="spotify-tabs">
+                            <button class="spotify-tab active" data-track="5mtTAScDytxMMqZj14NmlN" type="button">love. – wave to earth</button>
+                            <button class="spotify-tab" data-track="6xGruZOHLs39ZbVccQTuPZ" type="button">Glimpse of Us – Joji</button>
+                            <button class="spotify-tab" data-track="1TENfdcF7MX8B0HeQsPLdT" type="button">not the same w/o you – Skyline</button>
+                        </div>
+
                         <iframe
+                            id="spotify-player"
                             title="Spotify mini player - lagu favorit"
                             src="https://open.spotify.com/embed/track/5mtTAScDytxMMqZj14NmlN?utm_source=generator&theme=0"
                             width="100%"
@@ -85,11 +94,33 @@
                             loading="lazy">
                         </iframe>
                     </div>
+
+                    <!--
+                      WIDGET PLAYLIST SPOTIFY SENDIRI.
+                      GANTI ID playlist di "src" bawah ini dengan
+                      playlist Spotify kamu sendiri -- caranya sama
+                      persis kayak yang dijelasin panjang lebar di
+                      index.html (cari komentar "WIDGET PLAYLIST
+                      SPOTIFY SENDIRI" di sana).
+                    -->
+                    <div class="spotify-widget" style="margin-top: 16px;">
+                        <p class="spotify-widget-label">🎵 My Playlist</p>
+                        <iframe
+                            title="Spotify playlist favorit"
+                            src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0"
+                            width="100%"
+                            height="352"
+                            frameborder="0"
+                            allowfullscreen=""
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                            loading="lazy">
+                        </iframe>
+                    </div>
                 </div>
             </details>
 
             <!-- KATEGORI 3: HOBBIES -->
-            <details class="ff-accordion tilt-card">
+            <details class="ff-accordion">
                 <summary class="accordion-header">
                     <div class="header-content">
                         <span class="card-icon">🏃‍♂️</span>
@@ -107,7 +138,7 @@
             </details>
 
             <!-- KATEGORI 4: GAMES -->
-            <details class="ff-accordion tilt-card">
+            <details class="ff-accordion">
                 <summary class="accordion-header">
                     <div class="header-content">
                         <span class="card-icon">🎮</span>

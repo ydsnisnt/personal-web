@@ -227,71 +227,44 @@ spawnSnow(snowContainer, TOTAL_SNOWFLAKES);
 
 
 // ============================================================
-// FITUR TAMBAHAN 4: EFEK INTERAKTIF 3D TILT
+// FITUR TAMBAHAN 4: TAB PEMILIH LAGU DI WIDGET SPOTIFY
 // ============================================================
-// Elemen apa pun yang dikasih class "tilt-card" di HTML (misalnya
-// kartu hero & widget Spotify) akan "dimiringkan" mengikuti posisi
-// kursor mouse, seolah-olah kartunya punya kedalaman 3 dimensi.
-//
-// Caranya: setiap kali mouse bergerak DI ATAS kartu, kita hitung
-// seberapa jauh posisi kursor dari titik TENGAH kartu (baik secara
-// horizontal maupun vertikal), lalu ubah jarak itu jadi derajat
-// rotasi lewat CSS custom property --rx (rotate sumbu X) dan
-// --ry (rotate sumbu Y) yang sudah disiapkan di style.css.
-function initTiltEffect() {
-  // ambil SEMUA elemen yang punya class "tilt-card" di halaman ini
-  const tiltCards = document.querySelectorAll('.tilt-card');
+// Sebelumnya widget Spotify cuma bisa nampilin 1 lagu doang (iframe-nya
+// statis). Sekarang di atas iframe ada beberapa tombol <button
+// class="spotify-tab" data-track="ID_LAGU">, dan fungsi di bawah ini
+// yang bikin tombol-tombol itu "hidup": pas diklik, iframe langsung
+// ganti isinya ke lagu yang dipilih -- TANPA reload halaman sama sekali.
+function initSpotifyTabs() {
+  // ambil elemen iframe player-nya. Kalau halaman ini nggak punya
+  // iframe dengan id ini (misal dipakai di halaman lain yang beda
+  // strukturnya), fungsi berhenti di sini -- daripada error.
+  const player = document.getElementById('spotify-player');
+  if (!player) return;
 
-  // sudut kemiringan maksimum (dalam derajat). Semakin besar angka
-  // ini, semakin "ekstrem" efek miringnya pas mouse di pinggir kartu.
-  const MAX_TILT_DEGREES = 10;
+  // ambil SEMUA tombol tab lagu yang ada di halaman
+  const tabs = document.querySelectorAll('.spotify-tab');
 
-  tiltCards.forEach((card) => {
-    // EVENT: mouse bergerak di atas kartu
-    card.addEventListener('mousemove', (event) => {
-      // getBoundingClientRect() ngasih tau posisi & ukuran kartu
-      // ini relatif terhadap layar (viewport) saat ini
-      const rect = card.getBoundingClientRect();
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      // ambil ID lagu Spotify yang disimpan di atribut data-track
+      // (lihat HTML: data-track="ID_LAGU_DISINI")
+      const trackId = tab.dataset.track;
 
-      // posisi kursor mouse relatif terhadap SISI KIRI-ATAS kartu
-      // (bukan relatif ke layar), makanya dikurangi rect.left/top
-      const mouseX = event.clientX - rect.left;
-      const mouseY = event.clientY - rect.top;
+      // bangun ulang URL embed Spotify dengan ID lagu yang baru,
+      // lalu pasang ke atribut "src" iframe -- ini yang bikin
+      // player-nya "ganti lagu" secara instan
+      player.src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
 
-      // titik tengah kartu secara horizontal & vertikal
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      // seberapa jauh mouse dari titik tengah, dinormalisasi jadi
-      // rentang angka -1 (paling kiri/atas) sampai 1 (paling kanan/bawah)
-      const percentX = (mouseX - centerX) / centerX;
-      const percentY = (mouseY - centerY) / centerY;
-
-      // ubah persentase jarak itu jadi derajat rotasi.
-      // - gerak mouse ke KANAN-KIRI -> memutar kartu pada sumbu Y
-      // - gerak mouse ke ATAS-BAWAH -> memutar kartu pada sumbu X
-      //   (dikasih tanda minus di rotateX supaya arah miringnya
-      //   terasa "natural", seolah kartu mengikuti ujung kursor)
-      const rotateY = percentX * MAX_TILT_DEGREES;
-      const rotateX = percentY * -MAX_TILT_DEGREES;
-
-      // pasang nilai derajat ini ke custom property --rx / --ry.
-      // Custom property inilah yang langsung "dibaca" oleh CSS
-      // (lihat .tilt-card di style.css: transform: ... rotateX(var(--rx)) ...)
-      card.style.setProperty('--rx', `${rotateX}deg`);
-      card.style.setProperty('--ry', `${rotateY}deg`);
-    });
-
-    // EVENT: mouse keluar dari area kartu -> balikin ke posisi normal (0deg)
-    card.addEventListener('mouseleave', () => {
-      card.style.setProperty('--rx', '0deg');
-      card.style.setProperty('--ry', '0deg');
+      // hapus class "active" dari SEMUA tombol dulu...
+      tabs.forEach((t) => t.classList.remove('active'));
+      // ...baru tambahin lagi class "active" khusus ke tombol yang
+      // BARU AJA diklik, biar keliatan jelas lagu mana yang lagi diputar
+      tab.classList.add('active');
     });
   });
 }
 
-// langsung jalankan fungsinya sekali begitu script ini dimuat
-initTiltEffect();
+initSpotifyTabs();
 
 
 // ============================================================

@@ -19,42 +19,53 @@
    Sebelumnya warnanya maroon gelap & serius. Sekarang diganti jadi
    merah yang jauh lebih cerah/terang, dan semua elemen kaca (card,
    glass, tombol) dibikin lebih transparan + blur biar kesannya
-   "bening" kayak kaca, bukan solid. */
+   "bening" kayak kaca, bukan solid.
+
+   PERBAIKAN KONTRAS: versi sebelumnya sempat menyelipkan titik warna
+   hampir-putih (#FFE8E8) di tengah gradient -- pas animasi background
+   lagi "lewat" di titik itu, teks putih jadi nyaris nggak kebaca
+   (putih di atas putih). Sekarang SEMUA titik warna di gradient ini
+   sengaja dijaga tetap cukup "gelap/jenuh" (saturated red, bukan
+   pastel), supaya teks putih tetap kebaca jelas di titik MANA PUN
+   animasi gradient-nya lagi berhenti. */
 body.theme-maroon {
-    /* 4 titik warna merah cerah yang saling gradasi & bergerak pelan.
-       Ada selipan putih (#FFE8E8) di tengah supaya ada kesan "kilau"
-       terang, bukan cuma merah polos dari ujung ke ujung. */
-    background: linear-gradient(-45deg, #FF3B30, #FF6B6B, #FFE8E8, #FF1F4E);
+    /* 4 titik warna merah, semuanya di rentang "cukup gelap ke cerah"
+       (TIDAK ada yang mendekati putih), supaya teks putih di atasnya
+       selalu kontras */
+    background: linear-gradient(-45deg, #C81E3A, #FF3B30, #E63946, #FF1F4E);
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
 
     /* --card-bg dibikin putih transparan tipis (bukan gelap lagi)
        supaya kartu/panel keliatan seperti kaca bening di atas
        gradient merah, bukan kotak solid gelap yang menutupi warna */
-    --card-bg: rgba(255, 255, 255, 0.28);
-    --glass-bg: rgba(255, 255, 255, 0.16);      /* lapisan kaca tipis di atas bg terang */
-    --glass-border: rgba(255, 255, 255, 0.45);   /* garis tepi kaca, terang & jelas */
+    --card-bg: rgba(255, 255, 255, 0.22);
+    --glass-bg: rgba(255, 255, 255, 0.14);      /* lapisan kaca tipis di atas bg terang */
+    --glass-border: rgba(255, 255, 255, 0.4);    /* garis tepi kaca, terang & jelas */
     --track-bg: rgba(255, 255, 255, 0.3);        /* warna dasar switch/toggle */
     --track-border: rgba(255, 255, 255, 0.45);
     --text-color: #ffffff;                       /* teks tetap putih, kontras di atas merah */
-    --accent-color: #FF1F4E;                      /* merah-pink terang buat hover/aksen */
-    --accent-glow: rgba(255, 31, 78, 0.55);
-    --subtext-color: #FFD9DC;                     /* merah muda pucat buat teks sekunder */
+    --accent-color: #FFD166;                      /* AKSEN GOLD -- ganti dari merah-pink jadi emas lembut, biar kerasa elegan & nggak "hilang" ketelan warna merah background */
+    --accent-glow: rgba(255, 209, 102, 0.55);
+    --subtext-color: #FFE1E1;                     /* merah muda pucat buat teks sekunder */
     --title-gradient-start: #ffffff;              /* gradasi judul: putih -> subtext */
+    --text-shadow-safe: 0 2px 12px rgba(0, 0, 0, 0.45); /* bayangan gelap di belakang teks, jaring pengaman kontras ekstra */
 }
 
-/* Mode Fun: FROSTY BLUE BRIGHT (biru cerah & "bening"/glossy, tema salju) */
+/* Mode Fun: FROSTY BLUE BRIGHT (biru cerah & "bening"/glossy, tema salju)
+   PERBAIKAN KONTRAS: sama seperti Pro Mode, titik warna hampir-putih
+   (#E0F7FF) di gradient lama dihapus supaya teks putih selalu kebaca. */
 body.theme-blue {
-    /* Diganti dari pastel campur-campur jadi biru cerah konsisten,
-       biar berasa "dingin & bening" -- cocok buat dipasangin sama
-       efek salju & blur yang kita tambahin di bawah */
-    background: linear-gradient(-45deg, #00C6FB, #005BEA, #E0F7FF, #2979FF);
+    /* Diganti dari pastel campur-campur jadi biru cerah konsisten
+       & tetap "gelap/jenuh" di semua titik (nggak ada yang mendekati
+       putih), cocok dipasangin efek salju & blur di bawah */
+    background: linear-gradient(-45deg, #0072C6, #00A8E8, #005BEA, #2979FF);
     background-size: 400% 400%;
     animation: gradientBG 18s ease infinite;
 
-    --card-bg: rgba(255, 255, 255, 0.3);
-    --glass-bg: rgba(255, 255, 255, 0.16);       /* kaca terang tipis di atas bg biru */
-    --glass-border: rgba(255, 255, 255, 0.45);
+    --card-bg: rgba(255, 255, 255, 0.24);
+    --glass-bg: rgba(255, 255, 255, 0.14);       /* kaca terang tipis di atas bg biru */
+    --glass-border: rgba(255, 255, 255, 0.4);
     --track-bg: rgba(255, 255, 255, 0.3);
     --track-border: rgba(255, 255, 255, 0.45);
     --text-color: #ffffff;                        /* teks putih, kontras di atas biru cerah */
@@ -62,6 +73,7 @@ body.theme-blue {
     --accent-glow: rgba(0, 229, 255, 0.55);
     --subtext-color: #DFF6FF;                      /* biru sangat muda buat teks sekunder */
     --title-gradient-start: #ffffff;
+    --text-shadow-safe: 0 2px 12px rgba(0, 30, 70, 0.5); /* bayangan biru gelap, jaring pengaman kontras ekstra */
 }
 
 /* ==========================================
@@ -86,12 +98,36 @@ body.theme-blue {
 body {
     color: var(--text-color);
     font-family: 'Poppins', 'Inter', sans-serif;
-    min-height: 100vh;
+    min-height: 100vh;         /* "min" -- BUKAN "height" tetap. Bedanya penting:
+                                   kalau kontennya lebih pendek dari 1 layar, box-nya
+                                   tetap setinggi 1 layar (buat centering di bawah).
+                                   Tapi kalau kontennya lebih PANJANG dari 1 layar
+                                   (misalnya pas widget Spotify + playlist muncul),
+                                   box ini boleh MEMANJANG ngikutin konten -- nggak
+                                   dipaksa pas 1 layar kayak sebelumnya. */
+    padding-top: 100px;        /* jarak aman di atas, biar konten NGGAK PERNAH mulai
+                                   dari balik header yang "fixed" (header nggak ikut
+                                   ngambil tempat di layout normal, jadi kalau nggak
+                                   dikasih padding manual kayak gini, konten lain bisa
+                                   "mulai" dari paling atas layar -- ketutupan header) */
+    padding-bottom: 40px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center;   /* tetap dipertahankan: kalau kontennya PENDEK &
+                                   muat dalam 1 layar (misal widget dihapus lagi nanti),
+                                   ini bakal balik nge-center kayak semula. Tapi kalau
+                                   kontennya PANJANG, efek "center" ini otomatis nggak
+                                   kerasa lagi -- karena nggak ada sisa ruang buat
+                                   di-center, jadi konten cuma numpuk rapi dari atas */
     align-items: center;
-    overflow: hidden;
+
+    /* FIX BUG: dulu "overflow: hidden" di sini -- itu yang bikin konten
+       yang kepanjangan (ngelewatin 1 layar) jadi KEPOTONG/ketutupan,
+       bukannya bisa di-scroll. Sekarang dihapus, biar halaman ini bisa
+       di-scroll normal kalau kontennya emang lebih panjang dari layar
+       (kayak yang terjadi di HP begitu widget Spotify & playlist penuh). */
+    overflow-x: hidden;        /* ini beda -- cuma cegah SCROLL SAMPING (horizontal)
+                                   yang nggak diinginkan, scroll ATAS-BAWAH tetap boleh */
 }
 
 /* ==========================================
@@ -101,12 +137,25 @@ body {
     position: fixed;
     top: 0;
     left: 0;
+    right: 0;                  /* dipasangin bareng "left:0" -- lebih aman dari "width:100%"
+                                   karena otomatis ngikutin lebar viewport walau ada
+                                   scrollbar/notch, nggak perlu itung manual */
     width: 100%;
     padding: 25px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+
+    /* HARDENING KHUSUS MOBILE: sebagian browser mobile (terutama versi
+       lama Safari/iOS) punya bug di mana elemen "position: fixed" bisa
+       "lepas"/geser dikit pas layar di-scroll cepat. translateZ(0) ini
+       maksa browser bikin header-nya jadi "layer" render terpisah (GPU
+       compositing layer) -- caranya seolah-olah kita kasih transform
+       3D sekecil 0px, cukup buat browser "sadar" elemen ini harus
+       dijaga posisinya, tanpa keliatan efek visual apa pun. */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .logo {
@@ -115,6 +164,7 @@ body {
     letter-spacing: 4px;
     color: var(--text-color);
     opacity: 0.9;
+    text-shadow: var(--text-shadow-safe); /* jaring pengaman kontras: bayangan gelap tipis di belakang teks */
 }
 
 .header-right {
@@ -139,6 +189,7 @@ body {
     margin-bottom: 12px;
     font-weight: 400;
     text-transform: uppercase;
+    text-shadow: var(--text-shadow-safe); /* jaring pengaman kontras */
     transition: letter-spacing 0.4s ease, color 0.4s ease;
 }
 
@@ -157,7 +208,7 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 
-    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.4));
     transition: transform 0.4s ease, filter 0.4s ease, letter-spacing 0.4s ease;
 }
 
@@ -179,6 +230,7 @@ body {
     color: var(--subtext-color);
     font-weight: 300;
     text-transform: uppercase;
+    text-shadow: var(--text-shadow-safe); /* jaring pengaman kontras */
     transition: letter-spacing 0.4s ease, color 0.4s ease;
 }
 
@@ -258,6 +310,7 @@ body {
     gap: 12px;
     font-size: 0.85rem;
     font-weight: 500;
+    text-shadow: var(--text-shadow-safe); /* jaring pengaman kontras buat teks "Profesional Mode / Fun Mode" */
 }
 
 .switch {
@@ -389,30 +442,6 @@ body.theme-blue .btn-funfact {
 }
 
 /* ==========================================
-   12. KARTU DENGAN EFEK 3D TILT (MIRING IKUT MOUSE)
-   ==========================================
-   Elemen apa pun yang dikasih class "tilt-card" akan dipantau
-   pergerakan mouse-nya lewat script.js. JS bakal ngitung posisi
-   kursor relatif ke tengah kartu, terus set custom property
-   --rx (rotateX) dan --ry (rotateY) lewat style.setProperty().
-   Di sinilah custom property itu "dipakai" jadi transform beneran. */
-.tilt-card {
-    /* nilai default 0deg kalau JS belum sempat jalan / mouse di luar */
-    --rx: 0deg;
-    --ry: 0deg;
-
-    /* perspective() bikin efek 3D biar rotateX/Y kerasa "nembus" layar,
-       bukan cuma gepeng. Angka kecil (600px) = efek makin dramatis,
-       angka besar = efek makin halus/subtle */
-    transform: perspective(600px) rotateX(var(--rx)) rotateY(var(--ry));
-
-    /* transition cuma dipasang buat transform, biar pas mouse KELUAR
-       dari kartu dia balik ke posisi normal secara halus (bukan patah) */
-    transition: transform 0.25s ease-out;
-    will-change: transform; /* kasih tau browser bagian ini sering berubah, biar dioptimasi */
-}
-
-/* ==========================================
    13. TOMBOL WHATSAPP MENGAMBANG (FLOATING ACTION BUTTON)
    ==========================================
    Muncul di semua halaman (index & funfact), nempel di pojok
@@ -472,7 +501,14 @@ body.theme-blue .btn-funfact {
    Iframe Spotify sendiri sudah dikasih tampilan dari pihak Spotify,
    jadi kita cuma perlu bikin "pigura" kaca di sekitarnya. */
 .spotify-widget {
-    margin-top: 30px;
+    /* FIX: sebelumnya cuma "margin-top: 30px", jadi widget ini nempel
+       ke KIRI (soalnya dia div block biasa dengan max-width yang lebih
+       kecil dari parent-nya, dan block-level element defaultnya rata
+       kiri kalau nggak dikasih margin auto). "margin: 30px auto 0"
+       artinya: 30px di atas, kiri-kanan "auto" -- inilah yang bikin
+       browser otomatis bagi sisa ruang kosong SAMA RATA ke kiri &
+       kanan, hasilnya widget-nya jadi center secara horizontal. */
+    margin: 30px auto 0;
     width: 100%;
     max-width: 340px;
 
@@ -500,6 +536,46 @@ body.theme-blue .btn-funfact {
     width: 100%;
     border-radius: 12px;   /* Spotify sendiri punya radius, ini cuma jaga-jaga */
     border: none;          /* hilangkan garis tepi default iframe */
+}
+
+/* ==========================================
+   14b. TOMBOL TAB PEMILIH LAGU (MULTI-SONG)
+   ==========================================
+   Dulu widget Spotify cuma bisa nampilin 1 lagu. Sekarang ditambah
+   baris tombol kecil di atas iframe -- tiap tombol mewakili 1 lagu.
+   Pas diklik, script.js bakal GANTI atribut "src" punya iframe-nya
+   ke lagu yang dipilih (lihat fungsi initSpotifyTabs() di script.js). */
+.spotify-tabs {
+    display: flex;
+    flex-wrap: wrap;         /* kalau nama lagunya kepanjangan, tombol lanjut ke baris baru */
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.spotify-tab {
+    background: var(--glass-bg);
+    color: var(--text-color);
+    border: 1px solid var(--glass-border);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;      /* nama lagu nggak kepotong ke tengah kata */
+    transition: all 0.25s ease;
+}
+
+.spotify-tab:hover {
+    border-color: var(--accent-color);
+}
+
+/* tombol tab yang lagi "aktif" (lagu yang lagi diputar) dikasih warna
+   aksen penuh biar jelas bedanya sama tombol yang belum dipilih */
+.spotify-tab.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #1a1a1a; /* teks gelap di atas aksen terang (gold/cyan) biar tetap kebaca */
 }
 
 /* ==========================================
@@ -587,11 +663,128 @@ body.theme-blue .snowflake {
     }
 }
 
-/* Pastikan konten utama (header, hero, footer) tetap di atas
-   overlay blur & salju, supaya nggak ketutupan */
-.main-header,
+/* Konten utama (hero & footer) harus tetap di atas overlay & salju.
+   CATATAN PENTING: ".main-header" SENGAJA TIDAK dimasukkan ke sini!
+   Header itu sudah punya "position: fixed;" sendiri di bagian 5 di atas
+   (dengan z-index: 100, sudah lebih dari cukup buat ada di atas overlay
+   & salju yang cuma z-index 0-1). Kalau header ikut ditulis "position:
+   relative" di sini, itu bakal MENIMPA "position: fixed" bawaannya --
+   header jadi ikut masuk ke alur flex-layout body dan seluruh tata letak
+   halaman jadi berantakan (ini BUG yang sempat bikin link sosmed di
+   bawah Instagram nggak kepencet, soalnya ketutupan elemen lain yang
+   jadi salah posisi). Pelajaran: hati-hati nulis ulang selector yang
+   sudah punya "position" di tempat lain, karena CSS akan pakai aturan
+   yang paling TERAKHIR ditulis kalau specificity-nya sama. */
 .hero-container,
 .main-footer {
     position: relative;
     z-index: 10;
+}
+
+/* ==========================================
+   17. DEKORASI ELEGAN KHUSUS PROFESSIONAL MODE
+   ==========================================
+   Permintaannya: background Pro Mode kelihatan "terlalu polos",
+   pengen ada tambahan biar lebih elegan tapi tetap simpel. Jadi di
+   sini kita TIDAK pasang animasi ramai kayak salju, melainkan 2 hal
+   yang halus & "mewah":
+   1) pola garis diagonal super tipis (kayak tekstur kain linen)
+   2) 3 gumpalan "asap" blur yang MENGALIR pelan ke berbagai arah --
+      dibikin lonjong & di-blur berat biar keliatan kayak kabut/asap
+      tipis yang ngambang, bukan bola cahaya statis. */
+.pro-decor {
+    position: fixed;
+    inset: 0;                 /* shortcut top/right/bottom/left: 0 */
+    z-index: 0;                /* paling belakang, sejajar dengan overlay/salju di Fun Mode */
+    pointer-events: none;      /* jangan sampai nge-block klik ke tombol di atasnya */
+    overflow: hidden;
+
+    /* pola garis diagonal halus: repeating-linear-gradient bikin garis
+       tipis berulang tiap 46px, warnanya putih transparan banget (0.05)
+       jadi cuma kerasa sebagai "tekstur", bukan garis yang mencolok */
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent 0px 46px,
+        rgba(255, 255, 255, 0.05) 46px 47px
+    );
+
+    opacity: 0;                /* default nggak aktif (Fun Mode nggak butuh dekorasi ini) */
+    transition: opacity 0.6s ease;
+}
+
+/* dekorasi ini cuma "dinyalakan" pas Professional Mode aktif */
+body.theme-maroon .pro-decor {
+    opacity: 1;
+}
+
+/* ==========================================
+   ASAP / KABUT BLUR YANG MENGALIR PELAN
+   ==========================================
+   Tiap ".smoke" itu 1 gumpalan asap: bentuknya LONJONG (ellipse, lewat
+   border-radius yang beda antara lebar & tinggi) dan di-blur SANGAT
+   BERAT (blur(90px)) supaya tepiannya nggak kelihatan tegas sama
+   sekali -- persis kesan asap tipis, bukan lingkaran cahaya biasa.
+   Masing-masing gumpalan bergerak (translate) + sedikit membesar-
+   mengecil (scale) secara perlahan & terus-menerus (infinite),
+   dengan durasi & arah beda-beda supaya gerakannya kerasa "organik"
+   kayak asap beneran, bukan mesin yang serba seragam. */
+.smoke {
+    position: absolute;
+    border-radius: 50%;          /* dikombinasi sama width/height beda -> jadi lonjong (ellipse) */
+    filter: blur(90px);           /* blur SANGAT besar biar jadi kabut lembut, bukan lingkaran solid */
+    pointer-events: none;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+/* gumpalan 1: putih, mulai dari pojok kiri-atas, mengalir ke kanan-bawah */
+.smoke-1 {
+    width: 520px;
+    height: 320px;
+    top: -8%;
+    left: -15%;
+    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.30), transparent 70%);
+    animation: smoke-drift-a 42s infinite;
+}
+
+/* gumpalan 2: keemasan lembut, dari pojok kanan-bawah -- sentuhan
+   warna gold ini yang bikin Pro Mode kerasa "elegan/mewah", senada
+   sama --accent-color yang juga sudah diganti jadi gold (#FFD166) */
+.smoke-2 {
+    width: 600px;
+    height: 360px;
+    bottom: -12%;
+    right: -18%;
+    background: radial-gradient(ellipse, rgba(255, 209, 102, 0.22), transparent 70%);
+    animation: smoke-drift-b 55s infinite;
+    animation-delay: -12s; /* delay negatif biar geraknya nggak sinkron sama gumpalan lain */
+}
+
+/* gumpalan 3: putih tipis, mengambang di tengah -- bikin komposisinya
+   nggak cuma di pojok-pojok doang */
+.smoke-3 {
+    width: 420px;
+    height: 260px;
+    top: 38%;
+    left: 42%;
+    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.2), transparent 70%);
+    animation: smoke-drift-a 48s infinite reverse;
+    animation-delay: -24s;
+}
+
+/* dua arah aliran asap yang beda, biar gumpalan-gumpalannya nggak
+   semua bergerak searah (kesannya jadi lebih "acak"/alami) */
+@keyframes smoke-drift-a {
+    0%   { transform: translate(0, 0) scale(1); }
+    25%  { transform: translate(70px, 30px) scale(1.12); }
+    50%  { transform: translate(20px, 80px) scale(0.95); }
+    75%  { transform: translate(-40px, 20px) scale(1.05); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes smoke-drift-b {
+    0%   { transform: translate(0, 0) scale(1); }
+    30%  { transform: translate(-60px, -35px) scale(1.1); }
+    60%  { transform: translate(-15px, -70px) scale(0.9); }
+    100% { transform: translate(0, 0) scale(1); }
 }

@@ -24,6 +24,18 @@
     <div id="bg-blur-overlay" class="bg-blur-overlay"></div>
     <div id="snow-container" class="snow-container"></div>
 
+    <!--
+      DEKORASI KHUSUS PROFESSIONAL MODE (lihat style.css bagian 17).
+      Cuma kelihatan (opacity:1) pas body.theme-maroon aktif -- di Fun
+      Mode dia otomatis transparan/nggak kelihatan, gantian sama
+      overlay blur + salju di atas.
+    -->
+    <div class="pro-decor">
+        <span class="smoke smoke-1"></span>
+        <span class="smoke smoke-2"></span>
+        <span class="smoke smoke-3"></span>
+    </div>
+
     <!-- HEADER UTAMA -->
     <header class="main-header">
         <!-- Brand / Logo Kiri Atas -->
@@ -40,6 +52,12 @@
                     <a href="https://instagram.com/ydsisnt_" target="_blank" rel="noopener" class="sosmed-item">Instagram</a>
                     <a href="https://www.facebook.com/share/1DQ97p2Qo3/" target="_blank" rel="noopener" class="sosmed-item">Facebook</a>
                     <a href="https://www.youtube.com/@yudasisnandar7334" target="_blank" rel="noopener" class="sosmed-item">YouTube</a>
+                    <!--
+                      TikTok baru ditambahin di sini. GANTI href di bawah
+                      dengan link profil TikTok kamu yang asli, formatnya:
+                      https://www.tiktok.com/@username_kamu
+                    -->
+                    <a href="https://www.tiktok.com/@mitokondriaaa" target="_blank" rel="noopener" class="sosmed-item">TikTok</a>
                     <!-- FYI: href Pinterest kamu sebelumnya kepanjangan teks "Check out my Pinterest profile!..."
                          itu bukan URL valid, jadi link-nya bakal rusak. Aku betulkan jadi URL murni di bawah. -->
                     <a href="https://pin.it/1u1EvgTv3" target="_blank" rel="noopener" class="sosmed-item">Pinterest</a>
@@ -58,13 +76,7 @@
     </header>
 
     <!-- KONTEN UTAMA (HERO SECTION DESAIN MINIMALIS) -->
-    <main class="hero-container tilt-card">
-        <!--
-          class "tilt-card" ditambahin di sini supaya seluruh blok hero
-          (judul + subjudul) ikut miring 3D ngikutin posisi mouse.
-          Logikanya ada di script.js -> fungsi initTiltEffect().
-        -->
-
+    <main class="hero-container">
         <!--
           FIX: dulu elemen-elemen ini belum ada padahal script.js & style.css
           udah nyiapin logikanya (heroSubtitle, .sub-title-top, .sub-title-bottom).
@@ -82,28 +94,72 @@
         </div>
 
         <!--
-          WIDGET "NOW PLAYING" -- EMBED SPOTIFY MINI PLAYER
+          WIDGET "NOW PLAYING" -- EMBED SPOTIFY MINI PLAYER (MULTI-LAGU)
           ==================================================
           Ini nampilin lagu favorit langsung dari Spotify pakai
           <iframe> resmi mereka (fitur "Embed" yang Spotify sediakan,
-          bukan hosting file musik sendiri).
+          bukan hosting file musik sendiri). Sekarang bisa GANTI-GANTI
+          lagu lewat tombol tab di atas player, nggak cuma 1 lagu doang.
 
-          CARA GANTI KE LAGU FAVORIT KAMU SENDIRI:
+          CARA NAMBAH / GANTI LAGU DI TAB:
           1. Buka lagunya di app/situs Spotify
-          2. Klik titik tiga (...) -> Share -> Copy embed code / Copy link lagu
+          2. Klik titik tiga (...) -> Share -> Copy link lagu
           3. Dari link itu, ambil bagian ID-nya. Contoh:
              https://open.spotify.com/track/ISI_ID_LAGU_DI_SINI
-          4. Ganti ID di URL "src" bawah ini (yang sekarang isinya
-             lagu "love." dari wave to earth, sesuai daftar favoritmu
-             di halaman Fun Facts) dengan ID lagu pilihanmu.
+          4. Tambah 1 baris <button class="spotify-tab" data-track="ID_LAGU">
+             Nama Lagu</button> baru di dalam .spotify-tabs di bawah.
+             Nggak perlu sentuh script.js sama sekali -- dia otomatis
+             baca SEMUA tombol yang ada lewat querySelectorAll.
         -->
-        <div class="spotify-widget tilt-card">
+        <div class="spotify-widget">
             <p class="spotify-widget-label">🎧 Now Playing</p>
+
+            <!-- baris tombol pemilih lagu -->
+            <div class="spotify-tabs">
+                <button class="spotify-tab active" data-track="5mtTAScDytxMMqZj14NmlN" type="button">love. – wave to earth</button>
+                <button class="spotify-tab" data-track="6xGruZOHLs39ZbVccQTuPZ" type="button">Glimpse of Us – Joji</button>
+                <button class="spotify-tab" data-track="1TENfdcF7MX8B0HeQsPLdT" type="button">not the same w/o you – Skyline</button>
+            </div>
+
+            <!-- id="spotify-player" dipakai script.js buat nemuin iframe
+                 ini dan ganti "src"-nya pas tab lain diklik -->
             <iframe
+                id="spotify-player"
                 title="Spotify mini player - lagu favorit"
                 src="https://open.spotify.com/embed/track/5mtTAScDytxMMqZj14NmlN?utm_source=generator&theme=0"
                 width="100%"
                 height="152"
+                frameborder="0"
+                allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy">
+            </iframe>
+        </div>
+
+        <!--
+          WIDGET PLAYLIST SPOTIFY SENDIRI
+          ==================================================
+          Bedanya sama widget di atas: ini nge-embed 1 PLAYLIST utuh
+          (bisa banyak lagu sekaligus, orang bisa scroll & pilih sendiri
+          lagu mana yang mau diputar), bukan cuma 1 lagu per tab.
+
+          CARA PASANG PLAYLIST KAMU SENDIRI (WAJIB DIGANTI):
+          1. Buka playlist kamu di app/situs Spotify (playlist HARUS
+             berstatus PUBLIC, kalau private nggak akan bisa diputar
+             orang lain)
+          2. Klik titik tiga (...) di playlist itu -> Share -> Copy link playlist
+          3. Link-nya bakal kayak: https://open.spotify.com/playlist/ISI_ID_PLAYLIST
+          4. Ambil ISI_ID_PLAYLIST itu, tempel ganti bagian ID di "src"
+             iframe bawah ini (yang sekarang isinya playlist contoh
+             "Today's Top Hits" dari Spotify, cuma placeholder)
+        -->
+        <div class="spotify-widget" style="margin-top: 16px;">
+            <p class="spotify-widget-label">🎵 My Playlist</p>
+            <iframe
+                title="Spotify playlist favorit"
+                src="https://open.spotify.com/embed/playlist/1yxUrDiMRNJvz0hp2iMwPz?utm_source=generator&theme=0"
+                width="100%"
+                height="352"
                 frameborder="0"
                 allowfullscreen=""
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
@@ -130,7 +186,7 @@
       pas orang buka chat-nya (opsional, boleh dihapus kalau nggak perlu).
     -->
     <a
-        href="https://wa.me/6283140664585?text=Halo%20ydsisnt%2C%20aku%20lihat%20web%20kamu%21"
+        href="https://wa.me/6281234567890?text=Halo%20ydsisnt%2C%20aku%20lihat%20web%20kamu%21"
         target="_blank"
         rel="noopener"
         class="btn-whatsapp-float"

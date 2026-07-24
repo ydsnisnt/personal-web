@@ -109,45 +109,27 @@ spawnSnow(snowContainer, TOTAL_SNOWFLAKES);
 
 
 // ============================================================
-// FITUR TAMBAHAN: EFEK INTERAKTIF 3D TILT
+// FITUR TAMBAHAN: TAB PEMILIH LAGU DI WIDGET SPOTIFY
 // ============================================================
-// Sama persis konsepnya dengan yang di script.js (halaman utama):
-// tiap elemen ber-class "tilt-card" dimiringkan mengikuti posisi
-// kursor mouse lewat custom property CSS --rx & --ry.
-function initTiltEffect() {
-  const tiltCards = document.querySelectorAll('.tilt-card');
-  const MAX_TILT_DEGREES = 8; // dibuat lebih kecil dari halaman utama, soalnya kartu di sini lebih banyak & berdempetan
+// Sama persis logikanya kayak di script.js (halaman utama): tombol
+// ber-class "spotify-tab" pas diklik bakal ganti "src" punya iframe
+// #spotify-player ke lagu yang dipilih, tanpa reload halaman.
+function initSpotifyTabs() {
+  const player = document.getElementById('spotify-player');
+  if (!player) return; // kalau iframe-nya nggak ada, berhenti -- jangan error
 
-  tiltCards.forEach((card) => {
-    card.addEventListener('mousemove', (event) => {
-      const rect = card.getBoundingClientRect();
+  const tabs = document.querySelectorAll('.spotify-tab');
 
-      // posisi mouse relatif ke pojok kiri-atas kartu ini
-      const mouseX = event.clientX - rect.left;
-      const mouseY = event.clientY - rect.top;
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const trackId = tab.dataset.track;
+      player.src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
 
-      // titik tengah kartu
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      // normalisasi jarak dari tengah jadi rentang -1 sampai 1
-      const percentX = (mouseX - centerX) / centerX;
-      const percentY = (mouseY - centerY) / centerY;
-
-      // konversi ke derajat rotasi buat sumbu X & Y
-      const rotateY = percentX * MAX_TILT_DEGREES;
-      const rotateX = percentY * -MAX_TILT_DEGREES;
-
-      card.style.setProperty('--rx', `${rotateX}deg`);
-      card.style.setProperty('--ry', `${rotateY}deg`);
-    });
-
-    // pas kursor keluar dari kartu, balikin ke posisi rata (0deg)
-    card.addEventListener('mouseleave', () => {
-      card.style.setProperty('--rx', '0deg');
-      card.style.setProperty('--ry', '0deg');
+      // pindahin class "active" dari tombol lama ke tombol yang baru diklik
+      tabs.forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
     });
   });
 }
 
-initTiltEffect();
+initSpotifyTabs();

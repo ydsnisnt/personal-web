@@ -16,9 +16,11 @@
   bukan kayak buka halaman lain yang temanya beda.
 */
 body {
-    /* 4 titik warna biru cerah, sama seperti gradient Fun Mode di
-       style.css -- ada selipan putih (#E0F7FF) biar ada kesan kilau */
-    background: linear-gradient(-45deg, #00C6FB, #005BEA, #E0F7FF, #2979FF);
+    /* Gradient biru yang sama persis dengan Fun Mode di style.css --
+       semua titik warnanya sengaja dijaga "cukup jenuh/gelap" (BUKAN
+       pastel/hampir-putih) supaya teks putih di atasnya selalu kebaca
+       jelas, di titik mana pun animasi gradient-nya lagi berhenti */
+    background: linear-gradient(-45deg, #0072C6, #00A8E8, #005BEA, #2979FF);
     background-size: 400% 400%;
     animation: gradientBG 18s ease infinite;
     background-attachment: fixed;
@@ -41,12 +43,20 @@ body {
     position: fixed;
     top: 0;
     left: 0;
+    right: 0;                  /* sama seperti di style.css: lebih aman dari width:100% doang */
     width: 100%;
     padding: 25px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+
+    /* HARDENING KHUSUS MOBILE -- penjelasan lengkap ada di style.css
+       (.main-header). Intinya: bikin header jadi layer render sendiri
+       biar nggak "lepas" pas halaman ini di-scroll cepat di HP. */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+
     /* header kaca biru transparan, senada sama gradient body yang baru */
     background: rgba(0, 91, 234, 0.28);
     backdrop-filter: blur(10px);
@@ -75,6 +85,7 @@ body {
     font-size: 0.9rem;
     letter-spacing: 3px;
     color: #DFF6FF;
+    text-shadow: 0 2px 10px rgba(0, 30, 70, 0.5); /* jaring pengaman kontras -- bayangan navy gelap di belakang teks */
 }
 
 /* CONTAINER UTAMA */
@@ -92,11 +103,13 @@ body {
     background: linear-gradient(180deg, #ffffff 40%, #00E5FF 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 16px rgba(0, 30, 70, 0.45)); /* dipakai drop-shadow (bukan text-shadow) karena teksnya di-"clip" jadi gradient transparan */
 }
 
 .ff-subtitle {
     font-size: 0.85rem;
     color: #DFF6FF;
+    text-shadow: 0 2px 10px rgba(0, 30, 70, 0.5); /* jaring pengaman kontras */
     margin-bottom: 35px;
     font-weight: 300;
 }
@@ -153,6 +166,7 @@ body {
     font-size: 1rem;
     font-weight: 600;
     color: #ffffff;
+    text-shadow: 0 1px 6px rgba(0, 30, 70, 0.4); /* jaring pengaman kontras */
 }
 
 .arrow-icon {
@@ -184,6 +198,7 @@ details[open] .accordion-header {
     font-size: 0.9rem;
     margin-bottom: 10px;
     color: #ffffff;
+    text-shadow: 0 1px 6px rgba(0, 30, 70, 0.35); /* jaring pengaman kontras */
 }
 
 .accordion-body li:last-child {
@@ -252,6 +267,7 @@ details[open] > .game-summary .arrow-icon-small {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 0.85rem;
     color: #ffffff;
+    text-shadow: 0 1px 6px rgba(0, 30, 70, 0.35); /* jaring pengaman kontras */
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -259,6 +275,71 @@ details[open] > .game-summary .arrow-icon-small {
 
 .game-info p strong {
     color: #DFF6FF;
+}
+
+/* ==========================================
+   WIDGET "NOW PLAYING" -- BUNGKUS EMBED SPOTIFY
+   ==========================================
+   Sama seperti di style.css: ini cuma bungkusan kaca visual di
+   sekitar <iframe> Spotify, disesuaikan warnanya biar senada sama
+   tema biru cerah halaman Fun Facts ini. */
+.spotify-widget {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 18px;
+    padding: 14px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 15px 35px rgba(0, 20, 60, 0.25);
+}
+
+.spotify-widget-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #DFF6FF;
+    margin-bottom: 10px;
+    text-align: left;
+    padding-left: 4px;
+}
+
+.spotify-widget iframe {
+    width: 100%;
+    border-radius: 12px;
+    border: none;
+}
+
+/* tombol tab pemilih lagu -- lihat penjelasan lengkap di style.css,
+   ini versi warnanya aja yang disesuaikan ke tema biru halaman ini */
+.spotify-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.spotify-tab {
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+}
+
+.spotify-tab:hover {
+    border-color: #00E5FF;
+}
+
+.spotify-tab.active {
+    background: #00E5FF;
+    border-color: #00E5FF;
+    color: #003049; /* teks navy gelap di atas cyan terang biar kebaca */
 }
 
 /* ==========================================
@@ -382,25 +463,17 @@ details[open] > .game-summary .arrow-icon-small {
     }
 }
 
-/* Konten utama (header & container) harus tetap di atas overlay & salju */
-.ff-header,
+/* Konten utama (container) harus tetap di atas overlay & salju.
+   CATATAN: ".ff-header" SENGAJA TIDAK dimasukkan ke sini, karena dia
+   sudah punya "position: fixed;" sendiri (lihat di atas, dekat awal
+   file) dengan z-index: 100 -- itu udah lebih dari cukup buat tetap
+   di atas overlay & salju yang cuma z-index 0-1. Kalau ikut ditulis
+   "position: relative" di sini, itu bakal MENIMPA fixed-nya karena
+   aturan yang ditulis belakangan menang (lihat catatan sama persis
+   di style.css, bug ini sempat kejadian di sana). */
 .ff-container {
     position: relative;
     z-index: 10;
-}
-
-/* ==========================================
-   FITUR TAMBAHAN: KARTU DENGAN EFEK 3D TILT
-   ==========================================
-   Sama seperti di index.html: elemen dengan class "tilt-card" akan
-   dimiringkan mengikuti posisi mouse lewat funfact-script.js, yang
-   mengatur custom property --rx & --ry ini secara real-time. */
-.tilt-card {
-    --rx: 0deg;
-    --ry: 0deg;
-    transform: perspective(700px) rotateX(var(--rx)) rotateY(var(--ry));
-    transition: transform 0.25s ease-out;
-    will-change: transform;
 }
 
 /* ==========================================
